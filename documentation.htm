@@ -1,0 +1,178 @@
+<!doctype html>
+
+<html>
+
+<head>
+</head>
+
+<body>
+<h1>Survey System</h1>
+
+<h2>Introduction</h2>
+<p>This system lets you create different kinds of online surveys, present them to users, and collect their responses in coma-delimited files. It also includes a script that will summarize survey results. To create a survey, you first describe the survey in a text file, as explained later in this document.</p>
+
+<h2>Files in the Package</h2>
+<p>You should have received the system in a zip file containing the following files:</p>
+<ul>
+  <li>readme.txt</li>
+  <li>documentation.htm</li>
+  <li>include.php</li>
+  <li>survey.php</li>
+  <li>confirm.php</li>
+  <li>form.php</li>
+  <li>return.php</li>
+  <li>summarize.php</li>
+  <li>sample-survey</li>
+  <li>sample-survey-resp.txt</li>
+</ul>
+
+<h2>System Requirements</h2>
+To run this system, you need a web host that runs PHP at least version 5.2.10, which even at the time of this writing is not the very latest. It should run on later versions and even some earlier ones. It does not require a database of any kind.
+
+<h2>How to Install the System</h2>
+<p>There are a few changes you must make to some of the files to run them under your environment, which could be a local server on your personal computer or a remote server on an internet web host. You can make the changes before or after you upload the files to your environment. Web hosts generally provide an interface for their customers to manage their sites, and this interface will include a facility to upload files. You can also use an ordinary FTP client. Specific instructions are outside the scope of this document, so please ask your web host support if you need help. Here are the files you'll need to edit and the changes you'll have to make. To make the changes, you may use any text editor. You may also use Microsoft Word, but you must make sure to save the files as <i>text</i> files and without changing the file names or extensions.</p>
+
+<h3>include.php</h3>
+<p>This file contains a few "constants," or information that the system uses. By putting this information in one file, we avoid having to make many changes in various places to the other files. Here are the contents of the file, at least the part that counts. In the rest of the file, the lines that start with an asterisk are comments.</p>
+
+<pre>
+  define ('RH_BASE_URL', 'http://www.example.com/survey/');
+  define ('RH_BASE_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
+  define ('RH_SURVEY_PAGE_URL', 'http://www.example.com/survey/survey.php');
+  define ('RH_CONFIRM_PAGE_URL', 'http://www.example.com/survey/confirm.php');
+</pre>
+
+<p>In the above section, notice that the word "define" is followed by some text within parenthesis and ended with a semi-colon. Notice further that the text within the parenthesis is grouped into two strings of text separated by a coma. If you can imagine that the coma means "as," each line can then be read as "define this as that." To customize the system to your environment, you must edit the "that" parts.</p>
+
+<h4>RH_BASE_URL</h4>
+<p>This is the URL to the location on your server where you place the system files. Ideally, the files will be in a directory of their own.</p>
+
+<h4>RH_BASE_PATH</h4>
+<p>This also refers to the location on your server where you place the system files but in terms of file system path, not URL. The good news is that you will probably not have to change this line. Under most circumstances, the current value will work. If it doesn't, you will have to determine the specific file path to the directory you're using to hold the system's files. An example of a specific path might be '/users/jsmith/public_html/survey/'. If it is a specific path instead of a function, don't forget to put it in single quotes and end it with a forward slash. If necessary, ask your system administrator or web support staff for assistance.
+
+<h4>RH_SURVEY_PAGE_URL<br />
+RH_CONFIRM_PAGE_URL</h4>
+<p>These refer to the file names of the survey and confirm modules respectively. Again, the good news is that you will not normally need to change them.</p>
+
+<h3>Run the System</h3>
+<p>Open your browser and go to the URL http://www.example.com/survey/survey.php, but of course substitute www.example.com/survey with the URL you're using. You should see the sample survey form appear.</p>
+<p>Fill out the survey and click on the Done! button. If you forgot to answer a question, the system will display the form again and tell you what question you missed. You won't have to re-enter the answers you gave before. Once you submit a completed survey, the system will show you a confirmation page.</p>
+<p>The confirmation page consists of the survey form with the answers you selected, along with a thank you message at the top. The form will be disabled so you cannot change your answers. It will also not have a Done! button to prevent submitted the same survey twice.</p>
+
+<p>At the bottom of the page there will be a Validation Timestamp. Although the surveys are anonymous, the validation timestamp can be used to identify an entry in the survey response file, and to double check that the answers given are the same.</p>
+<p>After the timestamp, there will be a link leading you to some other place, place which could be a repetition of taking the survey. You can configure this link along with the various messages displayed. This is explained later in this documentation.</p>
+
+<h2>Creating Your Own Surveys</h2>
+The system "knows" about surveys because surveys are stored in Survey Definition Files (SDFs) written in the Survey Definition Language (SDL). That sounds very fancy, but it's actually very simple. Let's just call SDFs "survey files" and forget about the SDL. A survey file is a text file. You can create and edit text files with a text editor like notepad.exe under Windows or TextEdit on a Mac. You can also use a word processor like MS-Word, but make sure in all cases to save files as plain text. Open the sample survey file, called "sample," and take a look at it. At least some of it will make sense at first glance.
+
+<h3>Survey Files</h3>
+<h4>Overview</h4>
+<p>Survey files are made up of two or more sections, each section with a unique section header that names that names the section. Section headers are surrounded by square brackets (i.e. []). The first section <i>must</i> be called meta. Subsequent sections may be called anything, but their names must be unique. You can't have two sections with the same name. The system does not sort sections, so you don't have to name them sequentially. However, doing so makes it easier on the human eye, and that's why they are numbered sequentially in the sample survey file.</p>
+<p>Each section has a variable number of lines, and each line contains a pair of items separated by a coma. Consider the first item a property, and the second item the property's value. Take the first line in the meta section.</p>
+<pre>name = "Sample Survey"</pre>
+<p>Since this is inside the meta section, you could read it as "the meta-name is Sample Survey." In other words, the name of the survey itself is "Sample Survey."</p>
+<p>There are a few rules. Section headers should not contain spaces or square brackets. Property names should not contain spaces or the equals sign. Property values that are text must be surrounded by double quotes, but numeric property values shouldn't be. And that's about it.
+
+<h4>Sections</h4>
+<h5>meta Section</h5>
+The first section, which must always be called meta, contains the following properties:
+<pre>name = "Sample Survey"
+instructions = "Please answer the following questions."
+thanks = "Thank you for taking this survey!"
+exit_message = "Someone else to take this survey?"
+exit_url = "http://www.example.com/survey/survey.php?file=sample"</pre>
+
+<p>The name property is the name of the survey, and will appear as the survey's title on the survey form.
+<p>The instructions property is the text that introduces the survey and optionally instructs survey takers. The text appear below the survey title on the survey form.
+
+<p>The thanks property is the message thanking survey takers for taking the survey. It appears instead of the instructions on the survey form when the system confirms the survey submission.
+
+<p>The exit_message property (note the underscore linking both words) and the exit_url combine to form the exit link shown at the end of the submitted survey. You may send survey takers anywhere you want after they take the survey</p>
+
+<p>After that, notice there are a lines grouped under headings called section_1, section_2, section_3, etc., each heading surrounded by square brackets. These are section headings. Section headings don't have to be called section_1, section_2, section_3, etc. They don't even have to be sequential. They could be green, blue, and yellow, or George, Thomas, and David. They must, however, be unique, and they should not contain spaces. And of course, they can't be called name, instructions, or thanks, since the first three lines of the file already took those names, and don't forget that they must be surrounded by square brackets.</p>
+
+<h3>What are Sections?</h3>
+<p>A section is a group of one or more survey questions of the same type. There are four types of survey questions, types 0 through 3, and not all allow multiple questions.</p>
+
+<h4>Type 0</h4>
+This type of question is open-ended and provides a text box for a typed answer. You may place as many of this type of question as you want under the same section. Let's look at the sample survey.</p>
+
+<pre>[section_1]
+type = 0
+questions[] = "How old are you?"
+questions[] = "Where were you born?"</pre>
+
+<p>The very first line within any section is the survey question type. In the case of Type 0 questions, there follows a list of questions. This is the simplest type to describe. Each question must be assigned to the name <code>questions</code>, followed by a pair of empty square brackets, and followed by an equals sign.</p>
+
+<p>A couple of technical notes if you are curious. On the right side of the equals sign, number aren't surrounded by double quotes, but letters, words, and phrases are. Also, it may seem that the name <code>questions</code> is duplicated, but the pairs of empty quotes tell the system to insert a running tally number, so the result actually becomes:</p>
+
+<pre>questions[1] = "How old are you?"
+questions[2] = "Where were you born?"</pre>
+
+<p>And so on and so forth if there were more questions.</p>
+
+<h4>Type 1</h4>
+
+<p>This type of question offers a multiple choice question to people, and allows you to group several question that have the same possible multiple choice answers. From the sample survey:</p>
+
+<pre>[section_2]
+type = 1
+questions[] = "What size Coke do you prefer?"
+questions[] = "What size popcorn do you prefer?"
+questions[] = "What size candy bar do you prefer?"
+questions[] = "What size T-Shirt do you wear?"
+answers[] = "Small"
+answers[] = "Medium"
+answers[] = "Large"</pre>
+
+<p>As you expect, there's the section name, followed by the question type. Then there follows a list of question, just like in the case of Type 0. Now comes something new, a list of possible answers. When processing this section, the system will place each question, followed by three round checkboxes, on its own line. The three round checkboxes will be aligned under the headings Small, Medium, and Large.</p>
+
+<h4>Type 2</h4>
+
+<p>This type of question allows one and only one multiple choice question.</p>
+
+<pre>[section_4]
+type = 2
+questions[] = "What kind of car do you drive?"
+answers[] = "I don't drive"
+answers[] = "Honda"
+answers[] = "Toyota"
+answers[] = "Ford"
+answers[] = "General Motors"
+answers[] = "Other"</pre>
+
+<p>There is nothing new here. When processing this section, the system will display the question on one line, and beneath it, the list of questions, each on its own line, and each starting with a round checkbox to select it.</p>
+
+<h4>Type 3</h4>
+
+<p>This is the last survey question type. Like Type 2, it allows only one multiple choice question, except people can check all the answers that apply.</p>
+
+<pre>[section_6]
+type = 3
+questions[] = "Things you like about your job"
+answers[] = "Short commute"
+answers[] = "Good supervisor"
+answers[] = "Good co-workers"
+answers[] = "Fulfilling"
+answers[] = "High status"
+answers[] = "Fun environment"
+answers[] = "Pays well"</pre>
+
+<p>Again, nothing new. When processing this section, the system will display the question followed by the list of answers, expect instead of round checkboxes, there will be square checkboxes. The fact that they are square indicates that more than one can be selected at the same time.</p>
+
+<p>Another technical note. A round checkbox is actually called a "radio button," after the row of buttons on car radios that let you select different preset stations. Only one radio button can be pushed at once. If you press a different radio button, the radio button previously pushed in pops out. The square checkbox is called a checkbox, after the checkboxes found on paper forms.</p>
+
+<h3>Create Your Own Survey</h3>
+
+<p>Use your text editor to write your own survey, and make sure you save it with the same name you set for BCSS_SURVEY_FILE in constants.php. Upload it to your server if you're not working directly on your server. The file should go where the other BCSS files are.</p>
+
+<h2>Taking Your Survey</h2>
+
+<p>To take your survey, use the URL to the survey.php file, something like <code>http://www.example.com/survey.php</code>. The system will display your survey on the screen and allow anybod to fill it. When done, press the Done! button at the bottom of the survey.</p>
+
+<p>The system will not allow you to submit an incomplete survey. After you submmit a completed survey, the system shows you a confirmation page with the thank-you message you selected. At the bottom of the survey, instead of a button to submit the survey, there will be a link to take the survey again. This prevents someone, malicious or not, from filling the survey out once and then pressing the Done! button multiple times, resulting in duplicate submissions. The system also won't return to a completed survey. If you press your browser's back button, the system will redisplay the confirmation page.</p>
+
+
+</body>
+
+</html>
