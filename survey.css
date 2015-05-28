@@ -1,0 +1,104 @@
+/* #sf styles the survey form */
+
+#sf table {
+	border-collapse: collapse;
+}
+
+#sf .type1 thead {
+	border-bottom: 1px solid;
+}
+
+#sf th,
+#sf td {
+	font-weight: normal;
+	text-align: center;
+}
+
+#sf th:first-child {
+	text-align: left;
+}
+
+#sf th:nth-child(n+2),
+#sf td:nth-child(n+2) {
+	padding-left: 20px;
+}
+
+#sf fieldset {
+	padding: 0;
+	border: none;
+	margin: 0 0 10px 0;
+}
+
+
+/* #ss styles the survey summary */
+
+#ss table {
+	border-collapse: collapse;
+	border: 2px solid black;
+	table-layout: fixed;
+	margin-bottom: 30px;
+}
+
+/*
+This width accommodates three digit numbers.
+Expand if you get 1,000s of responses.
+*/
+#ss col:nth-child(2),
+#ss col:nth-child(3) {
+	width: 38px;
+}
+
+#ss td,
+#ss th {
+	border: 1px solid black;
+}
+
+#ss th {
+	vertical-align: bottom;
+	font-weight: normal;
+	padding: 2px 5px 2px 5px;
+}
+
+#ss th[scope="col"] {
+	text-align: center;
+}
+
+#ss th[scope="row"] {
+	text-align: left;
+}
+
+/*
+This fixes the first column heading under "Responses."
+Because this column is preceded by a column heading that uses
+rowspan, it is actually the first column despite being the second
+one from a visual perspective. Without this styling, the column
+aligns to the left.
+*/
+#ss .type1 thead tr:nth-child(2) th:first-child {
+	text-align: center;
+}
+
+#ss td {
+	text-align: right;
+	padding: 2px 5px 2px 5px;
+}
+
+#ss .col,
+#ss .type2 td:not(:first-child) ,
+#ss .type2 th:not(:first-child) ,
+#ss .type3 td:not(:first-child) ,
+#ss .type3 th:not(:first-child) {
+   border-left: 2px solid;
+}
+
+#ss p {
+  margin: 0 0 20px 20px;
+}
+
+#ss div:nth-child(2) p {
+  margin: 20px 0 20px 0;
+}
+
+#ss div:nth-child(1) p:nth-child(2) {
+  margin: 20px 0 20px 0;
+}
