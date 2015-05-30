@@ -109,7 +109,7 @@ class Survey {
 
 	function load_survey_responses() {
 		// load CSV file into $responses[]
-		$response_file = $this->survey_name . SURVEY_RESPONSE_FILE_EXT;
+		$response_file = $this->survey_name . '.' . SURVEY_RESPONSE_FILE_EXT;
 		if (!file_exists($response_file)) {
 			return 'Survey response file not found';
 		}
@@ -235,10 +235,11 @@ class Survey {
 			}
 		}
 		$cur_line .= "\r\n";
-		$file_handle = fopen($this->survey_name . SURVEY_RESPONSE_FILE_EXT, 'a');
+		$file_name = $this->survey_name . '.' . SURVEY_RESPONSE_FILE_EXT;
+		$file_handle = fopen($file_name, 'a');
 		fwrite($file_handle, $cur_line);
 		fclose($file_handle);
-		touch($this->survey_name . SURVEY_RESPONSE_FILE_EXT, $this->timestamp);
+		touch($file_name, $this->timestamp);
 		$this->js_function = 'formDisable';
 	}
 

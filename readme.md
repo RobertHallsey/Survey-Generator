@@ -1,7 +1,7 @@
 Survey Generator
 
-Survey Generator lets you generate, conduct, and summarize the results of custom surveys that you design. It collects the results in CSV files. It's written in PHP, using a procedural style. It does not use a database.
+Survey Generator gives you an easy way to generate, conduct, and summarize the results of custom surveys of you design. Survey Generator consists of just one file. It's written in PHP and does not use a database. Instead, survey results are saved in CSV format, which can be loaded as-is into Excel.
 
-My biggest challenge, not yet solved to my satisfaction, is preventing the user from hitting the browser's back button, returning to the completed survey form, and re-submitting it a hundred times in short order, basically invalidating the survey results.
-
-
+This work is copyright 2015 Robert Hallsey, rhallsey@yahoo.com.
+This work is provided under the GNU GPL 3.0 license.
+For more info, see https://www.gnu.org/copyleft/gpl.html

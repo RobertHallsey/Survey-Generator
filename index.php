@@ -10,9 +10,9 @@
 	<link rel="stylesheet" type="text/css" href="survey.css"></head>
 <body>
 
-<?php survey_conduct('sample') ?>
+<?php survey_conduct('sample-survey') ?>
 <hr>
-<?php survey_summarize('sample') ?>
+<?php survey_summarize('sample-survey') ?>
 
 </body>
 </html>
