@@ -42,8 +42,7 @@ function survey_summarize($given_survey = '') {
 	$error = $survey->load_survey_responses();
 	if ($error) exit($error);
 	$survey->summarize_responses();
-	$html = $survey->build_summary($given_survey);
-	echo $html;
+	$survey->render_summary($given_survey);
 }
 	
 class Survey {
@@ -57,14 +56,11 @@ class Survey {
 	
 	function __construct($survey_file) {
 		$this->survey_file = realpath($survey_file);
-		if ($this->survey_file == FALSE) {
-			exit('Survey file not found');
-		}
 	}
 	
 	function load_survey_file() {
 		if (!file_exists($this->survey_file)) {
-			return 'Survey file not there';
+			return 'Survey file not found';
 		}
 		//check the survey file for errors
 		if (($this->survey_data = parse_ini_file($this->survey_file, TRUE)) == FALSE) {
@@ -100,80 +96,6 @@ class Survey {
 				break;
 			}
 		}
-	}
-
-	function load_survey_responses() {
-		// load CSV file into $responses[]
-		$response_file = $this->survey_file . '.' . SURVEY_RESPONSE_FILE_EXT;
-		if (!file_exists($response_file)) {
-			return 'Survey response file not found';
-		}
-		$CSV_count = 0;
-		$responses = array();
-		$file_handle = fopen($response_file, 'r');
-		while (($data = fgetcsv($file_handle)) == TRUE) {
-			$responses[] = $data;
-			// make sure each line has same number of values
-			if ($CSV_count == 0) {
-				$CSV_count = count(current($responses));
-			}
-			if ($CSV_count != count(current($responses))) {
-				return 'File has lines of different value counts';
-			}
-		}
-		$this->response_count = count($responses);
-		// load $responses[] into $survey array
-		foreach ($responses as $response) {
-			$offset = 2;
-			foreach ($this->survey_data as $section_name => $section_data) {
-				$section_type = (($this->survey_data[$section_name]['type'] == 3) ? 'answers' : 'questions');
-				foreach ($section_data[$section_type] as $k => $v) {
-					$this->survey_data[$section_name]['responses'][$k][] = $response[$offset];
-					$offset++;
-				}
-			}
-		}
-		return '';
-	}
-	
-	function render_form() {
-		$view = new View;
-//		echo $this->build_header(),
-		$error_msg = '';
-		if ($this->error) {
-			$error_msg = (($this->error > 0)
-				? sprintf(SURVEY_ERROR_NO_RESPONSE, $this->error)
-				: sprintf(SURVEY_ERROR_EITHER_OR, -$this->error));
-		}
-		$error_question = abs($this->error);
-		$variables = array(
-			'error_msg' => $error_msg,
-			'error_question' => $error_question
-		);
-		$html = $view->create_html('surv_head', $variables);
-//		$this->build_body(),
-		$this->question_number = 1;
-		foreach ($this->survey_data as $section_name => $section_data) {
-			$variables = array(
-				'heading' => ((isset($this->survey_data[$section_name]['title']))
-					 ? $this->survey_data[$section_name]['title'] : ''),
-				'number' => $this->question_number,
-				'name' => $section_name,
-				'data' => $section_data,
-			);
-			$question_type = 'question_type' . $section_data['type'];
-			$html .= $view->create_html($question_type, $variables);
-			$this->question_number += count($section_data['questions']);
-		}
-//		$this->build_footer();
-		$execute = (($this->js_function == '') ? '' : $this->js_function . '();');
-		$variables = array(
-			'execute' => $execute,
-			'disabled' => ($this->js_function == 'formDisable'),
-			'timestamp' => $this->timestamp,
-		);
-		$html .= $view->create_html('surv_foot', $variables);
-		echo $html;
 	}
 	
 	function update_survey_data($data) {
@@ -237,6 +159,80 @@ class Survey {
 		touch($file_name, $this->timestamp);
 		$this->js_function = 'formDisable';
 	}
+	
+	function render_form() {
+		$view = new View;
+//		echo $this->build_header(),
+		$error_msg = '';
+		if ($this->error) {
+			$error_msg = (($this->error > 0)
+				? sprintf(SURVEY_ERROR_NO_RESPONSE, $this->error)
+				: sprintf(SURVEY_ERROR_EITHER_OR, -$this->error));
+		}
+		$error_question = abs($this->error);
+		$variables = array(
+			'error_msg' => $error_msg,
+			'error_question' => $error_question
+		);
+		$html = $view->create_html('surv_head', $variables);
+//		$this->build_body(),
+		$this->question_number = 1;
+		foreach ($this->survey_data as $section_name => $section_data) {
+			$variables = array(
+				'heading' => ((isset($this->survey_data[$section_name]['title']))
+					 ? $this->survey_data[$section_name]['title'] : ''),
+				'number' => $this->question_number,
+				'name' => $section_name,
+				'data' => $section_data,
+			);
+			$question_type = 'question_type' . $section_data['type'];
+			$html .= $view->create_html($question_type, $variables);
+			$this->question_number += count($section_data['questions']);
+		}
+//		$this->build_footer();
+		$execute = (($this->js_function == '') ? '' : $this->js_function . '();');
+		$variables = array(
+			'execute' => $execute,
+			'disabled' => ($this->js_function == 'formDisable'),
+			'timestamp' => $this->timestamp,
+		);
+		$html .= $view->create_html('surv_foot', $variables);
+		echo $html;
+	}
+
+	function load_survey_responses() {
+		// load CSV file into $responses[]
+		$response_file = $this->survey_file . '.' . SURVEY_RESPONSE_FILE_EXT;
+		if (!file_exists($response_file)) {
+			return 'Survey response file not found';
+		}
+		$CSV_count = 0;
+		$responses = array();
+		$file_handle = fopen($response_file, 'r');
+		while (($data = fgetcsv($file_handle)) == TRUE) {
+			$responses[] = $data;
+			// make sure each line has same number of values
+			if ($CSV_count == 0) {
+				$CSV_count = count(current($responses));
+			}
+			if ($CSV_count != count(current($responses))) {
+				return 'File has lines of different value counts';
+			}
+		}
+		$this->response_count = count($responses);
+		// load $responses[] into $survey array
+		foreach ($responses as $response) {
+			$offset = 2;
+			foreach ($this->survey_data as $section_name => $section_data) {
+				$section_type = (($this->survey_data[$section_name]['type'] == 3) ? 'answers' : 'questions');
+				foreach ($section_data[$section_type] as $k => $v) {
+					$this->survey_data[$section_name]['responses'][$k][] = $response[$offset];
+					$offset++;
+				}
+			}
+		}
+		return '';
+	}
 
 	function summarize_responses() {
 		// summarize responses in $this->survey_data array
@@ -293,7 +289,7 @@ class Survey {
 		return $section_data['summary'];
 	}
 
-	function build_summary($survey_file) {
+	function render_summary($survey_file) {
 		$html = '';
 		$view = new View;
 		$variables = array(
@@ -313,7 +309,7 @@ class Survey {
 		}
 		$variables = array();
 		$html .= $view->create_html('summary_foot', $variables);
-		return $html;
+		echo $html;
 	}
 
 }
