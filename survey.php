@@ -2,7 +2,7 @@
 
 define('SURVEY_RESET_BUTTON', 'Reset');
 define('SURVEY_SUBMIT_BUTTON', 'Submit');
-define('SURVEY_RESPONSE_FILE_EXT', '.csv');
+define('SURVEY_RESPONSE_FILE_EXT', 'csv');
 define('SURVEY_ERROR_NO_RESPONSE', 'Please answer question #%d');
 define('SURVEY_ERROR_EITHER_OR', 'Last option is either/or in question #%d');
 
@@ -48,31 +48,26 @@ function survey_summarize($given_survey = '') {
 	
 class Survey {
 	
-	protected $survey_name = '';
+	protected $survey_file = '';
 	protected $survey_data = array();
 	protected $question_number = 1;
 	protected $error = 0;
 	protected $timestamp = 0;
 	protected $js_function = 'formReset';
 	
-	function __construct($survey_arg = '') {
-		if ($survey_arg) {
-			$this->survey_name = realpath('public/' . $survey_arg);
-			if ($this->survey_name === FALSE) {
-				$this->survey_name = realpath($survey_arg);
-				if ($this->survey_name === FALSE) {
-					exit('Survey file not found');
-				}
-			}
+	function __construct($survey_file) {
+		$this->survey_file = realpath($survey_file);
+		if ($this->survey_file == FALSE) {
+			exit('Survey file not found');
 		}
 	}
 	
 	function load_survey_file() {
-		if (!file_exists($this->survey_name)) {
+		if (!file_exists($this->survey_file)) {
 			return 'Survey file not there';
 		}
 		//check the survey file for errors
-		if (($this->survey_data = parse_ini_file($this->survey_name, TRUE)) == FALSE) {
+		if (($this->survey_data = parse_ini_file($this->survey_file, TRUE)) == FALSE) {
 			return 'Cannot parse survey file';
 		}
 		foreach ($this->survey_data as $section_name => $section_data) {
@@ -109,7 +104,7 @@ class Survey {
 
 	function load_survey_responses() {
 		// load CSV file into $responses[]
-		$response_file = $this->survey_name . '.' . SURVEY_RESPONSE_FILE_EXT;
+		$response_file = $this->survey_file . '.' . SURVEY_RESPONSE_FILE_EXT;
 		if (!file_exists($response_file)) {
 			return 'Survey response file not found';
 		}
@@ -235,7 +230,7 @@ class Survey {
 			}
 		}
 		$cur_line .= "\r\n";
-		$file_name = $this->survey_name . '.' . SURVEY_RESPONSE_FILE_EXT;
+		$file_name = $this->survey_file . '.' . SURVEY_RESPONSE_FILE_EXT;
 		$file_handle = fopen($file_name, 'a');
 		fwrite($file_handle, $cur_line);
 		fclose($file_handle);
@@ -348,6 +343,7 @@ $this->template['surv_foot'] = <<<'SURV_FOOT'
 <?php if ($execute): ?>
 
 <script type="text/javascript">
+<?php if ($execute == 'formDisable();'): ?>
 	function formDisable() {
 		var form = document.getElementById("survey");
 		var elements = form.elements;
@@ -355,13 +351,16 @@ $this->template['surv_foot'] = <<<'SURV_FOOT'
 			elements[i].disabled = true;
 		}
 	}
+<?php elseif ($execute == 'formReset();'): ?>
 	function formReset() {
 		this.form.reset()
 	}
+<?php endif; ?>
+
 	<?php echo $execute ?>
 
 </script>
-
+	
 <?php endif; ?>
 
 </div><!-- sf survey form -->

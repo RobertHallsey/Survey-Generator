@@ -11,9 +11,10 @@
 <body>
 
 <?php survey_conduct('sample-survey') ?>
+<?php if ($_SERVER['REQUEST_METHOD'] == 'POST' && !isset($_SESSION['survey'])): ?>
 <hr>
 <?php survey_summarize('sample-survey') ?>
-
+<?php endif; ?>
 </body>
 </html>
 
