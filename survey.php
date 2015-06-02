@@ -49,7 +49,6 @@ class Survey {
 	
 	protected $survey_file = '';
 	protected $survey_data = array();
-	protected $question_number = 1;
 	protected $error = 0;
 	protected $timestamp = 0;
 	protected $js_function = 'formReset';
@@ -98,6 +97,46 @@ class Survey {
 		}
 	}
 	
+	function render_form() {
+		$view = new View;
+//		echo $this->build_header(),
+		$error_msg = '';
+		if ($this->error) {
+			$error_msg = (($this->error > 0)
+				? sprintf(SURVEY_ERROR_NO_RESPONSE, $this->error)
+				: sprintf(SURVEY_ERROR_EITHER_OR, -$this->error));
+		}
+		$error_question = abs($this->error);
+		$variables = array(
+			'error_msg' => $error_msg,
+			'error_question' => $error_question
+		);
+		$html = $view->create_html('surv_head', $variables);
+//		$this->build_body(),
+		$question_number = 1;
+		foreach ($this->survey_data as $section_name => $section_data) {
+			$variables = array(
+				'heading' => ((isset($this->survey_data[$section_name]['title']))
+					 ? $this->survey_data[$section_name]['title'] : ''),
+				'number' => $question_number,
+				'name' => $section_name,
+				'data' => $section_data,
+			);
+			$question_type = 'question_type' . $section_data['type'];
+			$html .= $view->create_html($question_type, $variables);
+			$question_number += count($section_data['questions']);
+		}
+//		$this->build_footer();
+		$execute = (($this->js_function == '') ? '' : $this->js_function . '();');
+		$variables = array(
+			'execute' => $execute,
+			'disabled' => ($this->js_function == 'formDisable'),
+			'timestamp' => $this->timestamp,
+		);
+		$html .= $view->create_html('surv_foot', $variables);
+		echo $html;
+	}
+	
 	function update_survey_data($data) {
 		foreach ($data as $section_name => $section_data) {
 			$this->survey_data[$section_name]['responses'] = $section_data['responses'];
@@ -105,14 +144,14 @@ class Survey {
 	}
 
 	function validate_errors() {
-		$this->question_number = 1;
+		$question_number = 1;
 		$this->error = 0;
 		$this->js_function = '';
 		foreach ($this->survey_data as $section_name => $section_data) {
 			$validate_function = 'validate_type' . $section_data['type'];
-			$this->error = $this->$validate_function($this->question_number, $section_data['responses']);
+			$this->error = $this->$validate_function($question_number, $section_data['responses']);
 			if ($this->error) break;
-			$this->question_number += count($section_data['responses']);
+			$question_number += count($section_data['responses']);
 		}
 		return $this->error;
 	}
@@ -158,46 +197,6 @@ class Survey {
 		fclose($file_handle);
 		touch($file_name, $this->timestamp);
 		$this->js_function = 'formDisable';
-	}
-	
-	function render_form() {
-		$view = new View;
-//		echo $this->build_header(),
-		$error_msg = '';
-		if ($this->error) {
-			$error_msg = (($this->error > 0)
-				? sprintf(SURVEY_ERROR_NO_RESPONSE, $this->error)
-				: sprintf(SURVEY_ERROR_EITHER_OR, -$this->error));
-		}
-		$error_question = abs($this->error);
-		$variables = array(
-			'error_msg' => $error_msg,
-			'error_question' => $error_question
-		);
-		$html = $view->create_html('surv_head', $variables);
-//		$this->build_body(),
-		$this->question_number = 1;
-		foreach ($this->survey_data as $section_name => $section_data) {
-			$variables = array(
-				'heading' => ((isset($this->survey_data[$section_name]['title']))
-					 ? $this->survey_data[$section_name]['title'] : ''),
-				'number' => $this->question_number,
-				'name' => $section_name,
-				'data' => $section_data,
-			);
-			$question_type = 'question_type' . $section_data['type'];
-			$html .= $view->create_html($question_type, $variables);
-			$this->question_number += count($section_data['questions']);
-		}
-//		$this->build_footer();
-		$execute = (($this->js_function == '') ? '' : $this->js_function . '();');
-		$variables = array(
-			'execute' => $execute,
-			'disabled' => ($this->js_function == 'formDisable'),
-			'timestamp' => $this->timestamp,
-		);
-		$html .= $view->create_html('surv_foot', $variables);
-		echo $html;
 	}
 
 	function load_survey_responses() {
@@ -296,16 +295,16 @@ class Survey {
 			'response_count' => $this->response_count,
 		);
 		$html .= $view->create_html('summary_head', $variables);
-		$this->question_number = 1;
+		$question_number = 1;
 		foreach ($this->survey_data as $section_name => $section_data) {
 			$summary_type = 'summary_type' . $this->survey_data[$section_name]['type'];
 			$variables = array(
-				'question_number' => $this->question_number,
+				'question_number' => $question_number,
 				'data' => $section_data,
 				'response_count' => $this->response_count,
 			);
 			$html .= $view->create_html($summary_type, $variables);
-			$this->question_number += count($section_data['questions']);
+			$question_number += count($section_data['questions']);
 		}
 		$variables = array();
 		$html .= $view->create_html('summary_foot', $variables);
