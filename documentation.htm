@@ -9,7 +9,7 @@
 <h1>Survey Generator</h1>
 
 <h2>Introduction</h2>
-<p>Survey Generator gives you an easy way to generate, conduct, and summarize the results of custom surveys. </p>
+<p>Survey Generator gives you an easy way to generate, conduct, and summarize the results of custom surveys.</p>
 
 <h2>Files in the Package</h2>
 <p>The Survey Generator package contains these files:</p>
@@ -18,23 +18,25 @@
   <li>documentation.htm</li>
   <li>survey.php</li>
   <li>index.php</li>
-  <li>survey.css</l1>
+  <li>survey.css</li>
   <li>sample-survey</li>
 </ul>
 
 <h2>How to Use Survey Generator</h2>
 
-<p>Of course, you must first include or require the file <code>survey.php</code> into your own script.</p>
+<p>The Survey Generator code is all in one file, <code>survey.php</code>. Of course, you must first include or require this file into your own script.</p>
 
 <p>To conduct a survey, use <code>&lt;?php survey_conduct('survey definition file') ?></code> anywhere you want the survey form to appear. The survey definition file is a text file in ordinary Windows INI format that defines a survey's question and answers. The argument can include an absolute or relative file path (not URL). Survey definition files can have any name and extension, and are fully described later.</p>
 
-<p>Survey results are saved in comma-delimited files that can be opened with Excel. They are saved with the same file name and in the same location of the survey definition file, but with the extension <code>csv</code> appended to the name and extension. For example, if your survey definition file is called <code>survey136.txt</code>, its results will accumulate in the file called <code>survey136.txt.csv</code>.
+<p>Survey results are saved in comma-delimited files that can be opened with Excel. They are saved with the same file name and in the same location of the survey definition file, but with the extension <code>csv</code> appended to the name and extension. For example, if your survey definition file is called <code>survey136.txt</code>, its results will accumulate in the file called <code>survey136.txt.csv</code>.</p>
 
 <p>To summarize the results of a survey, use <code>&lt;?php survey_summarize('survey definition file') ?></code>. The <code>survey_summarize()</code> function generates tables summarizing the responses by count and percentage.</p>
 
+<p>Finally, to get the name of a survey, <code>&lt;?php survey_name('survey definition file')</code> will do it. This is a simple function that returns <code>FALSE</code> if it can't find the file or if the file apparently isn't a survey definition file, or returns the survey name, which is embedded in a comment in the first line of the file.</p>
+
 <h2>Survey Definition Files</h2>
 
-<p>Open the file <code>sample-survey</code> and take a look at it. Survey definition files contain one or more sections, one for each question or panel of questions in the survey. Each section begins with its name surrounded by square brackets, like <code>[section_1]</code>. Section names must not contain spaces and must be unique. However, section names are not meaningful. They don't have to be sorted nor do they sort themselves nor anything like that. Sections are just grouping mechanisms for the definitions of a question or panel of questions. There are three types of questions.</p>
+<p>Open the file <code>sample-survey</code> and take a look at it. Survey definition files optionally start with the survey name embedded in a comment, which is a line that starts with a semicolon (;). This survey name is not used by the code and is there for your convenience. Following are one or more sections, one for each question or panel of questions in the survey. Each section begins with its name surrounded by square brackets, like <code>[section_1]</code>. Section names must not contain spaces and must be unique. However, section names are not meaningful. They don't have to be sorted nor do they sort themselves nor anything like that. Sections are just grouping mechanisms for the definitions of a question or panel of questions. There are three types of questions.</p>
 
 <h3>Type 1 Question</h3>
 
@@ -111,7 +113,7 @@ answers[] = "I don't like my job"</pre>
 <p>Survey Generator provides functionality without imposing any look or feel. It leaves the designing to you, the designer. It's <i>your canvas!</i> The included file <code>survey.css</code> can be used as a starting point.</p>
 
 <h2>It Must be Said</h2>
-<p>This software is copyright Robert Hallsey (rhallsey@yahoo.com) 2015. However, this software is released under the GNU General Public License v3 (GPLv3), so it is free software, and you can redistribute it or modify it under the terms of the GPLv3. Survey Generator is distributed in the hope that it is useful, but WITHOUT ANY WARRANTY, without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GPLv3 for more details. The entire GPLv3 is available online at http://www.gnu.org/licenses/gpl.html.</p>
+<p>This software is copyright Robert Hallsey (rhallsey@yahoo.com) 2015. However, this software is released under the GNU General Public License v3 (GPLv3), so it is free software, and you can redistribute it or modify it under the terms of the GPLv3. Survey Generator is distributed in the hope that it is useful, but WITHOUT ANY WARRANTY, without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GPLv3 for more details. The entire GPLv3 is available online at <a href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a>.</p>
  
 </body>
 

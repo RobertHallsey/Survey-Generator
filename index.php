@@ -10,6 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="survey.css"></head>
 <body>
 
+<?php echo survey_name('sample-survey') ?>
 <?php survey_conduct('sample-survey') ?>
 <?php if ($_SERVER['REQUEST_METHOD'] == 'POST' && !isset($_SESSION['survey'])): ?>
 <hr>

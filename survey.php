@@ -45,6 +45,25 @@ function survey_summarize($given_survey = '') {
 	$survey->render_summary($given_survey);
 }
 	
+function survey_name($given_survey = '') {
+	if ($given_survey == '') {
+		return FALSE;
+	}
+	if (file_exists($given_survey) == FALSE) {
+		return FALSE;
+	}
+	$survey = new Survey($given_survey);
+	if ($survey->load_survey_file()) {
+		unset($survey);
+		return FALSE;
+	}
+	$file_handle = fopen($given_survey, 'r');
+	$line = trim(fgets($file_handle), " ;\t\r\n\0\x0B");
+	fclose($file_handle);
+	unset($survey);
+	return $line;
+}
+
 class Survey {
 	
 	protected $survey_file = '';
