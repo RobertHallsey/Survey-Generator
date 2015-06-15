@@ -1,5 +1,28 @@
 <?php
 
+/**
+ * The Survey Plugin for Wolf CMS makes it easy to conduct custom surveys.
+ *
+ * @author Robert Hallsey <rhallsey@yahoo.com>
+ * @copyright Robert Hallsey, 2015
+ * @license http://www.gnu.org/licenses/gpl.html GPLv3 license
+ *
+ * This file is part of the Survey Plugin for Wolf CMS.
+ *
+ * The Survey Plugin for Wolf CMS is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * The Survey Plugin for Wolf CMS is distributed in the hope that it
+ * will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 define('SURVEY_RESET_BUTTON', 'Reset');
 define('SURVEY_SUBMIT_BUTTON', 'Submit');
 define('SURVEY_RESPONSE_FILE_EXT', 'csv');
@@ -46,21 +69,22 @@ function survey_summarize($given_survey = '') {
 }
 	
 function survey_name($given_survey = '') {
-	if ($given_survey == '') {
-		return FALSE;
-	}
-	if (file_exists($given_survey) == FALSE) {
+	if ($given_survey == '' || file_exists($given_survey) == FALSE) {
 		return FALSE;
 	}
 	$survey = new Survey($given_survey);
-	if ($survey->load_survey_file()) {
-		unset($survey);
+	$error = $survey->load_survey_file();
+	unset($survey);
+	if $error {
 		return FALSE;
 	}
 	$file_handle = fopen($given_survey, 'r');
-	$line = trim(fgets($file_handle), " ;\t\r\n\0\x0B");
+	$line = trim(fgets($file_handle), " \t\r\n\0\x0B");
 	fclose($file_handle);
-	unset($survey);
+	if (substr($line, 0, 1) != ';') {
+		return FALSE;
+	}
+	$line = substr($line, 1);
 	return $line;
 }
 
@@ -619,7 +643,6 @@ $this->template['summary_foot'] = <<<'SUMMARY_FOOT'
 </div><!-- ss:survey summary -->
 
 SUMMARY_FOOT;
-
 	}
 	
 	function create_html($tname, $vlist) {
