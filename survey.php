@@ -1,28 +1,5 @@
 <?php
 
-/**
- * The Survey Plugin for Wolf CMS makes it easy to conduct custom surveys.
- *
- * @author Robert Hallsey <rhallsey@yahoo.com>
- * @copyright Robert Hallsey, 2015
- * @license http://www.gnu.org/licenses/gpl.html GPLv3 license
- *
- * This file is part of the Survey Plugin for Wolf CMS.
- *
- * The Survey Plugin for Wolf CMS is free software: you can redistribute
- * it and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * The Survey Plugin for Wolf CMS is distributed in the hope that it
- * will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
- * the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 define('SURVEY_RESET_BUTTON', 'Reset');
 define('SURVEY_SUBMIT_BUTTON', 'Submit');
 define('SURVEY_RESPONSE_FILE_EXT', 'csv');
@@ -89,7 +66,7 @@ function survey_name($given_survey = '') {
 }
 
 class Survey {
-	
+
 	protected $survey_file = '';
 	protected $survey_data = array();
 	protected $error = 0;
@@ -643,6 +620,7 @@ $this->template['summary_foot'] = <<<'SUMMARY_FOOT'
 </div><!-- ss:survey summary -->
 
 SUMMARY_FOOT;
+
 	}
 	
 	function create_html($tname, $vlist) {
