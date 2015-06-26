@@ -1,8 +1,10 @@
 <?php
 
+// Remember to set SURVEY_BASE_PATH somewhere!
+
 class Survey {
 
-	const SURVEY_VIEWS = 'views/';
+	const SURVEY_VIEWS = SURVEY_BASE_PATH . 'views/';
 	const SURVEY_RESET_BUTTON = 'Reset';
 	const SURVEY_SUBMIT_BUTTON = 'Submit';
 	const SURVEY_RESPONSE_FILE_EXT = 'csv';
@@ -196,11 +198,12 @@ class Survey {
 	}
 
 	public function prepareSummary() {
-		$error = $survey->loadSurveyFile();
+		$error = $this->loadSurveyFile();
 		if ($error) exit($error);
-		$error = $survey->loadSurveyResponses();
+		//$this->prefillSurveyResponses();
+		$error = $this->loadSurveyResponses();
 		if ($error) exit($error);
-		$survey->summarizeResponses();
+		$this->summarizeResponses();
 	}
 
 	public function loadSurveyResponses() {
@@ -223,7 +226,7 @@ class Survey {
 			}
 		}
 		$this->response_count = count($responses);
-		// load $responses[] into $survey array
+		// load $responses[] into survey array
 		foreach ($responses as $response) {
 			$offset = 2;
 			foreach ($this->survey_data as $section_name => $section_data) {

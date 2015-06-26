@@ -11,6 +11,7 @@
 <body>
 
 <?php survey_conduct('sample-survey') ?>
+<?php survey_summarize('sample-survey') ?>
 </body>
 </html>
 

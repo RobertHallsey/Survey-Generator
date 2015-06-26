@@ -21,6 +21,8 @@ survey_summarize
 include 'View.php';
 include 'Survey.php';
 
+define('SURVEY_BASE_PATH', 'C:/Users/admin/Apache/htdocs/survey/');
+
 function survey_conduct($given_survey = '') {
 	if (session_id() == '') session_start();
 	if ($_SERVER['REQUEST_METHOD'] == 'GET') {
