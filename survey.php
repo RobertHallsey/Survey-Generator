@@ -1,10 +1,35 @@
 <?php
 
-// Remember to set SURVEY_BASE_PATH somewhere!
+/**
+ * The Survey Generator makes it easy to conduct custom surveys.
+ *
+ * @author Robert Hallsey <rhallsey@yahoo.com>
+ * @copyright Robert Hallsey, 2015
+ * @license http://www.gnu.org/licenses/gpl.html GPLv3 license
+ *
+ * The Survey Generator is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * The Survey Generator is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+ * the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
+// Remember to set the SURVEY_BASE_PATH constant in your code!
+
+/**
+ * class Survey
+ */
+ 
 class Survey {
 
-	const SURVEY_VIEWS = SURVEY_BASE_PATH . 'views/';
+	const SURVEY_VIEW_FILS = SURVEY_BASE_PATH . 'views/';
 	const SURVEY_RESET_BUTTON = 'Reset';
 	const SURVEY_SUBMIT_BUTTON = 'Submit';
 	const SURVEY_RESPONSE_FILE_EXT = 'csv';
@@ -55,6 +80,7 @@ class Survey {
 				return __("Section $section_name has missing or malformed answers.");
 			}
 		}
+		return '';
 	}
 
 	public function prefillSurveyResponses() {
@@ -163,7 +189,7 @@ class Survey {
 				? sprintf(Self::SURVEY_ERROR_NO_RESPONSE, $this->error)
 				: sprintf(Self::SURVEY_ERROR_EITHER_OR, -$this->error));
 		}
-		$view_file = Self::SURVEY_VIEWS . 'surveyheader';
+		$view_file = Self::SURVEY_VIEW_FILES . 'surveyheader';
 		$variables = array(
 			'survey_file' => $this->survey_file,
 			'survey_save' => base64_encode(serialize($this->survey_data)),
@@ -174,7 +200,7 @@ class Survey {
 		// build body
 		$question_number = 1;
 		foreach ($this->survey_data as $section_name => $section_data) {
-			$view_file = Self::SURVEY_VIEWS . 'qtype' . $this->survey_data[$section_name]['type'];
+			$view_file = Self::SURVEY_VIEW_FILES . 'qtype' . $this->survey_data[$section_name]['type'];
 			$variables = array(
 				'heading' => ((isset($this->survey_data[$section_name]['title']))
 					 ? $this->survey_data[$section_name]['title'] : ''),
@@ -187,7 +213,7 @@ class Survey {
 		}
 		// build footer
 		$js_code = (($this->js_function == '') ? '' : $this->js_function . '();');
-		$view_file = Self::SURVEY_VIEWS . 'surveyfooter';
+		$view_file = Self::SURVEY_VIEW_FILES . 'surveyfooter';
 		$variables = array(
 			'js_code' => $js_code,
 			'disabled' => ($this->js_function == 'formDisable'),
@@ -200,7 +226,6 @@ class Survey {
 	public function prepareSummary() {
 		$error = $this->loadSurveyFile();
 		if ($error) exit($error);
-		//$this->prefillSurveyResponses();
 		$error = $this->loadSurveyResponses();
 		if ($error) exit($error);
 		$this->summarizeResponses();
@@ -297,14 +322,14 @@ class Survey {
 
 	function theSummary() {
 		$html = '';
-		$view_file = Self::SURVEY_VIEWS . 'summaryheader';
+		$view_file = Self::SURVEY_VIEW_FILES . 'summaryheader';
 		$variables = array(
 			'response_count' => $this->response_count
 		);
 		$html .= new View($view_file, $variables);
 		$question_number = 1;
 		foreach ($this->survey_data as $section_name => $section_data) {
-			$view_file = Self::SURVEY_VIEWS . 'stype' . $this->survey_data[$section_name]['type'];
+			$view_file = Self::SURVEY_VIEW_FILES . 'stype' . $this->survey_data[$section_name]['type'];
 			$variables = array(
 				'question_number' => $question_number,
 				'data' => $section_data,
@@ -314,7 +339,7 @@ class Survey {
 			$question_number += count($section_data['questions']);
 		}
 		$variables = array();
-		$view_file = Self::SURVEY_VIEWS . 'summaryfooter';
+		$view_file = Self::SURVEY_VIEW_FILES . 'summaryfooter';
     	$html .= new View($view_file, $variables);
 		return $html;
 	}

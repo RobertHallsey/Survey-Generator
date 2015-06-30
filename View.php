@@ -1,14 +1,20 @@
 <?php
 
 /**
-* Basic view class for MVC approach to output
-* This class is based on the view class found
-* in Wolf CMS.
-*/
+ * Basic view class for MVC approach to output
+ * This class is based on the view class found
+ * in Wolf CMS. Feel free to use under GPL v3
+ *
+ * This class produces HTML code for a page or section of page from
+ * a "template" file that may use the "vars" you supply. A template file
+ * is just a file with HTML and PHP code. It doesn't have to represent
+ * an entire page. The file must have the extension .php.
+ *
+ */
 
 class View {
 
-	protected $file; // String of template file
+	protected $file; // Template file name. Don't specify extension. PHP will be assumed.
 	protected $vars = array(); // Array of template variables
 
 	public function __construct($file = '', $vars = '') {

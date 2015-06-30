@@ -1,9 +1,5 @@
 /* #sf styles the survey form */
 
-#sf table {
-	border-collapse: collapse;
-}
-
 #sf .type1 thead {
 	border-bottom: 1px solid;
 }
@@ -26,16 +22,14 @@
 #sf fieldset {
 	padding: 0;
 	border: none;
-	margin: 0 0 10px 0;
+	margin: 0;
 }
 
 
 /* #ss styles the survey summary */
 
 #ss table {
-	border-collapse: collapse;
 	border: 2px solid black;
-	table-layout: fixed;
 	margin-bottom: 30px;
 }
 
@@ -68,7 +62,7 @@ Expand if you get 1,000s of responses.
 }
 
 /*
-This fixes the first column heading under "Responses."
+This rule fixes the first column heading under "Responses."
 Because this column is preceded by a column heading that uses
 rowspan, it is actually the first column despite being the second
 one from a visual perspective. Without this styling, the column

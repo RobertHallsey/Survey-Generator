@@ -9,32 +9,75 @@
 <h1>Survey Generator</h1>
 
 <h2>Introduction</h2>
-<p>Survey Generator gives you an easy way to generate, conduct, and summarize the results of custom surveys.</p>
 
-<h2>Files in the Package</h2>
-<p>The Survey Generator package contains these files:</p>
+<h3>What it is</h3>
+
+<p>Survey Generator gives you an easy way to generate, conduct, and summarize the results of custom surveys you can place anywhere on your website. It's not a smartphone app or something you can put on your Facebook page. Survey Generator is a web developer's tool, though it is very easy to use.</p>
+
+<h3>How it works</h3>
+
+<p>Survey Generator works like this. Every survey consists of two files, a survey definition file, and a survey results file. Survey definition files are text files that contain the survey's questions and answer choices in Windows INI format. How to create these files is fully described later in this documentation. Survey results files are text files that collect the submitted responses in CSV (comma-separated values) format. Excel and other applications can load survey results files for ad hoc analysis, but Survey Generator includes a basic summarizing feature that may be all you need.</p>
+
+<h3>What's it for</h3>
+
+<p>You can use surveys for lots of things.</p>
+
 <ul>
-  <li>readme.md</li>
-  <li>documentation.htm</li>
-  <li>survey.php</li>
-  <li>index.php</li>
-  <li>survey.css</li>
-  <li>sample-survey</li>
+  <li>Let your visitors rate your services, your business, your employees.</li>
+  <li>See if your readers find your articles helpful.</li>
+  <li>Get reactions to your web changes before implementing them.</li>
+  <li>Quiz your visitors on their preferences.</li>
+  <li>Conduct anonymous surveys on any topic you want!</li>
 </ul>
 
-<h2>How to Use Survey Generator</h2>
+<h3>The fine print</h3>
 
-<p>The Survey Generator code is all in one file, <code>survey.php</code>. Of course, you must first include or require this file into your own script.</p>
+<p>Survey Generator is copyright 2015 by Robert Hallsey (rhallsey at yahoo.com) and released under the GNU General Public License v3 (GPLv3), so it is free software, and you can redistribute it or modify it under the terms of the GPLv3. Survey Generator is distributed in the hope that it is useful, but WITHOUT ANY WARRANTY, without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GPLv3 for more details. The entire GPLv3 is available online at <a href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a>.</p>
 
-<p>To conduct a survey, use <code>&lt;?php survey_conduct('survey definition file') ?></code> anywhere you want the survey form to appear. The survey definition file is a text file in ordinary Windows INI format that defines a survey's question and answers. The argument can include an absolute or relative file path (not URL). Survey definition files can have any name and extension, and are fully described later.</p>
+<h2>Getting started</h2>
 
-<p>Survey results are saved in comma-delimited files that can be opened with Excel. They are saved with the same file name and in the same location of the survey definition file, but with the extension <code>csv</code> appended to the name and extension. For example, if your survey definition file is called <code>survey136.txt</code>, its results will accumulate in the file called <code>survey136.txt.csv</code>.</p>
+<h3>Obtaining Survey Generator</h3>
 
-<p>To summarize the results of a survey, use <code>&lt;?php survey_summarize('survey definition file') ?></code>. The <code>survey_summarize()</code> function generates tables summarizing the responses by count and percentage.</p>
+<p>The most recent version of Survey Generator is always available from GitHub, at <a href="https://github.com/RobertHallsey/Survey-Generator">https://github.com/RobertHallsey/Survey-Generator</a>. If you're not familiar with GitHub, after you arrive at the linked page, look for the Download ZIP button at the bottom-right of the screen. That will get you a brand new zip of Survey Generator in your downloads folder.</p>
 
-<p>Finally, to get the name of a survey, <code>&lt;?php survey_name('survey definition file')</code> will do it. This is a simple function that returns <code>FALSE</code> if it can't find the file or if the file apparently isn't a survey definition file, or returns the survey name, which is embedded in a comment in the first line of the file.</p>
+<h3>Files in the Package</h3>
 
-<h2>Survey Definition Files</h2>
+<p>These are the files that should be in your zip archive. Unzip the entire archive to a folder somewhere on your web server. Make sure these files remain together: <code>survey-main.php</code>, <code>Survey.php</code>, <code>View.php</code>, and the <code>views</code> folder with its 10 files. The other files are not essential to the sofware's operation.</p>
+
+<ul>
+  <li>readme.md - Readme required by GitHub</li>
+  <li>documentation.htm - Documentation</li>
+  <li>index.php - Survey Generator demo</li>
+  <li>survey-main.php - Helper functions</li>
+  <li>Survey.php - Survey Generator class file</li>
+  <li>View.php - A basic view class</li>
+  <li>survey.css - Optional CSS code</li>
+  <li>sample-survey - survey definition file</li>
+  <li>sample-survey.cvs - survey results files</li>
+  <li>views (folder with 10 files)</li>
+</ul>
+
+<h3>Using Survey Generator in your own code</h3>
+
+<p>To get Survey Generator ready for to use, you must do two things: define the constant SURVEY_BASE_PATH with the path to Survey Generator's files, and include the file <code>survey-main.php</code> into your own code (however you want to do it). The <code>survey-main.php</code> file itself includes the Survey and View class files.</p>
+
+<pre><code>&lt;?php
+	include('survey_main.php');
+	define('SURVEY_BASE_PATH', 'path/to/survey/generator/files');
+?>
+</code></pre>
+
+<p>To conduct a survey, use <code>&lt;?php survey_conduct('survey definition file') ?></code> anywhere you want the survey form to appear. This one function builds and presents the survey form to the visitor, and then validates and saves the form after the user submits it.</p>
+
+<p>To summarize the results of a survey, use <code>&lt;?php survey_summarize('survey definition file') ?></code>. The <code>survey_summarize()</code> function generates tables summarizing the responses by count and percentage. Note that the function's argument is the name of the survey <i>definition</i> file, not the results file.</p>
+
+<p>Finally, to get the name of a survey, the name embedded in the definition file, <code>&lt;?php survey_name('survey definition file')</code> will do it. This is a simple function that returns <code>false</code> if it can't find the file or if the file apparently isn't a survey definition file, or returns the survey name, which is embedded in a comment in the first line of the file.</p>
+
+<h3>Running the demo</h3>
+
+<p>This is optional but can be useful to help understand how Survey Generator works. Load the file <code>index.php</code> in your internet browser, and you should see the survey form for the survey described in the file <code>sample-survey</code>, and following that, you should see the summary created from the file <code>sample-survey.cvs</code>.</p>
+
+<h2>Survey definition files</h2>
 
 <p>Open the file <code>sample-survey</code> and take a look at it. Survey definition files optionally start with the survey name embedded in a comment, which is a line that starts with a semicolon (;). This survey name is not used by the code and is there for your convenience. Following are one or more sections, one for each question or panel of questions in the survey. Each section begins with its name surrounded by square brackets, like <code>[section_1]</code>. Section names must not contain spaces and must be unique. However, section names are not meaningful. They don't have to be sorted nor do they sort themselves nor anything like that. Sections are just grouping mechanisms for the definitions of a question or panel of questions. There are three types of questions.</p>
 
@@ -52,22 +95,17 @@ answers[] = "S"
 answers[] = "M"
 answers[] = "L"</code></pre>
 
-<p>The first line says this is a type 1 question. Type 1 questions consist of a panel of questions, all with the same possible answers. Common applications for this type of question are assessing customer satisfaction with the various aspects of some paid experience, or determining the public's degree of familiarity with a product or concept.</p>
+<p>The first line says this is a type 1 question. Type 1 questions consist of a panel of questions, all with the same possible answers.</p>
 
 <p>The help property is a message displayed at the top of the questions, to the left of the answer headings. The help property is optional, and only type 1 questions recognize this property. You can't use it with types 2 and 3 questions.</p>
 
 <p>The title property is also optional, but can be used in all three question types. It's a heading that appears before the question. It's optional so that you can group several sections under the same title.</p>
 
-<p>Now comes a list of questions followed by a list of possible answers. Normally, property names must be unique, but the empty brackets mean that it's an array, so the property names will actually become:</p>
-
-<pre><code>questions[0] = "What size Coke do you prefer?"
-questions[1] = "What size popcorn do you prefer?"
-questions[2] = "What size candy bar do you prefer?"
-questions[3] = "What size T-Shirt do you wear?"</code></pre>
+<p>Now comes a list of questions followed by a list of possible answers. Normally, property names must be unique, but the empty brackets mean that it's an array.</p>
 
 <h3>Type 2 Question</h3>
 
-<p>This type of question allows one and only one multiple choice answer.</p>
+<p>This type of question allows one and only one multiple-choice answer.</p>
 
 <pre><code>[section_2]
 type = 2
@@ -79,11 +117,11 @@ answers[] = "General Motors"
 answers[] = "Other"
 answers[] = "I don't drive"</code></pre>
 
-<p>A note on good surveying practice: you should always include a catchall answer. A catchall answer makes it possible for everyone to answer the question. In this case, people who don't drive can select the final possible answer. Otherwise, they would be forced to either select a choice that was not true or abandon the survey. To prevent that, always provide a catchall.</p>
+<p>A good surveying practice is to always include a catchall answer. A catchall answer makes it possible for everyone to answer the question. In this case, people who don't drive <i>any</i> kind of car can select the last answer. Otherwise, they would be forced to either select a choice that was not true or abandon the survey. To prevent that, always provide a catchall.</p>
 
 <h3>Type 3 Question</h3>
 
-<p>This is the last survey question type. Like Type 2, it allows one multiple choice question, except people can check all the answers that apply.</p>
+<p>This is the last survey question type. Like Type 2, it allows one multiple-choice question, except people can check all the answers that apply.</p>
 
 <pre>[section_3]
 type = 3
@@ -97,23 +135,34 @@ answers[] = "Fun environment"
 answers[] = "Pays well"
 answers[] = "I don't like my job"</pre>
 
-<p>In the case of Type 3 questions, the last possible answer must always be a catchall answer. Survey takers cannot submit a survey in which responses <i>include</i> the catchall answer. The catchall answer must be selected exclusively or not selected at all.</p>
+<p>In the case of Type 3 questions, the last possible answer <i>must always be a catchall answer!</i> Because this type of question allows multiple responses, the last answer is always assumed to be a form of "none of the above." And because it is not logical to select some of the above and then check the box for "none of the above," the survey won't let users select <i>some</i> of the answers <i>and</i> the final answer. Users may select some of the answers <i>or</i> the last answer but not both.</p>
 
-<h3>Customization</h3>
+<h2>Survey results files</h2>
 
-<p>Should you need to change them, these constants are defined at the very start of the script.</p>
+<p>Opening a survey result file in a text editor shows it to be a collection of lines similar to this. If you opened the file in Excel, everything would be in columns instead of separated by commas.</p>
+
+<code>"2015-06-22","21:28:05",1,3,2,1,3,1,0,1,0,1,0,1,0</code>
+
+<p>The first and second comma-separated items are obviously the time and date. This is the same timestamp displayed after a survey is submitted. Although the surveys are anonymous, survey confirmation pages can be used to verify the accuracy of a results file by matching their timestamps.</p>
+
+<p>The row of numbers that follows the timestamp corresponds to the survey's responses. Since the sample line was taken from the file <code>sample-survey.csv</code>, we must refer to the definition file <code>sample-survey</code>. The first four numbers are 1, 3, 2, and 1. Those are the responses to the first question, the panel of four. Whoever submitted the survey prefers small Coke, large popcorn, medium candy, and wears a small T-Shirt. Moving on, we see they drive a 3, that is, a Ford, and they checked off a short commute, good co-workers, high status, and good pay as things they like about their job.</p>
+
+<h2>Styling with CSS</h2>
+
+<p>Survey Generator provides functionality without imposing any look or feel, but both the survey form and the survey summary can by styled with CSS. To help you target your CSS specifically, the survey form and summary are surrounded by div sections with ID attributes. The IDs are "sf" and "ss" respectively. This way, if you assign a rule to the selector <code>#sf p</code>, you assign it only to the paragraphs within the #sf div and don't affect the rest of your layout. The included file <code>survey.css</code> can be used as a starting point, so feel free to incorporate it into your own style sheets.
+
+<h2>Constants</h2>
+
+<p>Should you need to change them, these constants are defined at the very start of the file <code>Survey.php</code>.</p>
 <p><code>SURVEY_RESET_BUTTON</code>:<br>Text of the survey form's reset button, defaults to 'Reset'.</p>
 <p><code>SURVEY_SUBMIT_BUTTON</code>:<br>Text of the survey form's submit button, defaults to 'Submit'.</p>
 <p><code>SURVEY_RESPONSE_FILE_EXT</code>:<br>File extension for saving data, defaults to 'csv' (no dot).</p>
-<p><code>SURVEY_ERROR_NO_RESPONSE</code>:<br>Message returned when form is submitted with unanswered questions, string in sprintf format, defaults to 'Please answer question #%d'.</p>
+<p><code>SURVEY_ERROR_NO_RESPONSE</code>:<br>Message returned when form is submitted with unanswered questions, string in <code>sprintf</code> format, defaults to 'Please answer question #%d'.</p>
 <p><code>SURVEY_ERROR_EITHER_OR</code>:<br>Message returned when form is submitted with catchall and other answers selected, string in sprintf format, defaults to 'Last option is either/or in question #%d'.</p>
 
-<h3>Styling with CSS</h3>
+<h2>F.A.Q.</h2>
 
-<p>Survey Generator provides functionality without imposing any look or feel. It leaves the designing to you, the designer. It's <i>your canvas!</i> The included file <code>survey.css</code> can be used as a starting point.</p>
-
-<h2>The Fine Print</h2>
-<p>This software is copyright Robert Hallsey (rhallsey@yahoo.com) 2015. However, this software is released under the GNU General Public License v3 (GPLv3), so it is free software, and you can redistribute it or modify it under the terms of the GPLv3. Survey Generator is distributed in the hope that it is useful, but WITHOUT ANY WARRANTY, without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GPLv3 for more details. The entire GPLv3 is available online at <a href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a>.</p>
+<p>None yet.</p>
  
 </body>
 
