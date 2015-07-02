@@ -29,7 +29,7 @@
  
 class Survey {
 
-	const SURVEY_VIEW_FILS = SURVEY_BASE_PATH . 'views/';
+	const SURVEY_VIEW_FILES = SURVEY_BASE_PATH . 'views/';
 	const SURVEY_RESET_BUTTON = 'Reset';
 	const SURVEY_SUBMIT_BUTTON = 'Submit';
 	const SURVEY_RESPONSE_FILE_EXT = 'csv';
