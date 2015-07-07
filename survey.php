@@ -47,7 +47,7 @@ class Survey {
 		if (!$survey_arg) {
 			exit(__('No survey name specified'));
 		}
-		if (!file_exist($survey_arg)) {
+		if (!file_exists($survey_arg)) {
 			exit(__('Survey file not found'));
 		}
 		$this->survey_file = realpath($survey_arg);
