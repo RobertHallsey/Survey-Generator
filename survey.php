@@ -43,14 +43,14 @@ class Survey {
 	protected $timestamp = 0;
 	protected $response_count = 0;
 	
-	public function __construct($survey_arg = '') {
-		if ($survey_arg == '') {
+	public function __construct($survey_arg) {
+		if (!$survey_arg) {
 			exit(__('No survey name specified'));
 		}
-		$this->survey_file = realpath($survey_arg);
-		if ($this->survey_file === FALSE) {
+		if (!file_exist($survey_arg)) {
 			exit(__('Survey file not found'));
 		}
+		$this->survey_file = realpath($survey_arg);
 	}
 
 	public function prepareSurvey() {
@@ -60,9 +60,6 @@ class Survey {
 	}
 	
 	public function loadSurveyFile() {
-		if (!file_exists($this->survey_file)) {
-			return __('Survey file not found');
-		}
 		//check the survey file for errors
 		if (($this->survey_data = parse_ini_file($this->survey_file, TRUE)) == FALSE) {
 			return __('Cannot parse survey file');
@@ -86,20 +83,18 @@ class Survey {
 	public function prefillSurveyResponses() {
 		// pre-fill with blank responses
 		foreach ($this->survey_data as $section_name => $section_data) {
-			switch ($this->survey_data[$section_name]['type']) {
-			case 1:
-				if ( ! array_key_exists('help', $this->survey_data[$section_name])) {
+			if ($this->survey_data[$section_name]['type'] == 1) {
+				if (!array_key_exists('help', $this->survey_data[$section_name])) {
 					$this->survey_data[$section_name]['help'] = '';
 				}
-				// no break here;
-			case 2:
-				$this->survey_data[$section_name]['responses'] =
-					array_fill(0, count($this->survey_data[$section_name]['questions']), 0);
-				break;
-			case 3:
+			}
+			if ($this->survey_data[$section_name]['type'] == 3) {
 				$this->survey_data[$section_name]['responses'] =
 					array_fill(0, count($this->survey_data[$section_name]['answers']), 0);
-				break;
+			}
+			else {
+				$this->survey_data[$section_name]['responses'] =
+					array_fill(0, count($this->survey_data[$section_name]['questions']), 0);
 			}
 		}
 	}
@@ -110,14 +105,14 @@ class Survey {
 			array_replace_recursive(
 				unserialize(base64_decode($survey_save)),
 				$survey_data);
-		if ($this->validateErrors() == 0) {
-			$this->saveData();
+		if ($this->validateForm() == 0) {
+			$this->saveForm();
 			$status = TRUE;
 		}
 		return $status;
 	}
 	
-	public function validateErrors() {
+	public function validateForm() {
 		$question_number = 1;
 		$this->error = 0;
 		$this->js_function = '';
@@ -155,7 +150,7 @@ class Survey {
 		return 0;
 	}
 
-	public function saveData() {
+	public function saveForm() {
 		$this->timestamp = time();
 		$cur_line = '"' . date('Y-m-d', $this->timestamp) . '",' .
 					'"' . date('H:i:s', $this->timestamp) . '"';
@@ -215,6 +210,8 @@ class Survey {
 		$js_code = (($this->js_function == '') ? '' : $this->js_function . '();');
 		$view_file = Self::SURVEY_VIEW_FILES . 'surveyfooter';
 		$variables = array(
+			'reset_button' => Self::SURVEY_RESET_BUTTON,
+			'submit_button' => Self::SURVEY_SUBMIT_BUTTON,
 			'js_code' => $js_code,
 			'disabled' => ($this->js_function == 'formDisable'),
 			'timestamp' => $this->timestamp,
@@ -233,7 +230,14 @@ class Survey {
 
 	public function loadSurveyResponses() {
 		// load CSV file into $responses[]
-		$response_file = $this->survey_file . '.' . Self::SURVEY_RESPONSE_FILE_EXT;
+		$response_file = '';
+		if (strpos($this->survey_file, '.') !== FALSE) {
+			$response_file = substr($this->survey_file, 0, strripos($this->survey_file, '.') + 1);
+		}
+		else {
+			$response_file = $this->survey_file;
+		}
+		$response_file .= '.' . Self::SURVEY_RESPONSE_FILE_EXT;
 		if (!file_exists($response_file)) {
 			return __('Survey response file not found');
 		}

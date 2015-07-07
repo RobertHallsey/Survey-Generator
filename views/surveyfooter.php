@@ -1,23 +1,22 @@
 <?php
 
 /**
- * The Survey Generator makes it easy to conduct custom surveys.
+ * This file is a view file from the Survey Generator system.
  *
- * This file is part of the Survey Generator.
  * @author Robert Hallsey <rhallsey@yahoo.com>
  * @copyright Robert Hallsey, 2015
  * @license http://www.gnu.org/licenses/gpl.html GPLv3 license
  */
 ?>
 <?php if (!$disabled): ?>
-<p><input type="reset" value="<?php echo __('Clear form and start over') ?>"><input type="submit" name="submit" value="<?php echo __('Done!') ?>"></p>
+<p><input type="reset" value="<?php echo __($reset_button) ?>"><input type="submit" name="submit" value="<?php echo __($submit_button) ?>"></p>
 
 </form>
 <?php else: ?>
 
 </form>
 
-<p><?php echo __('Validation Timestamp: ') . date('M. d, Y h:i:s A', $timestamp) ?></p>
+<p><?php echo __('Timestamp: ') . date('M. d, Y h:i:s A', $timestamp) ?></p>
 <?php endif; ?>
 <?php if ($js_code): ?>
 

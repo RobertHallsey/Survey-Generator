@@ -1,5 +1,9 @@
 /* #sf styles the survey form */
 
+#sf table {
+	border-collapse: collapse;
+}
+
 #sf .type1 thead {
 	border-bottom: 1px solid;
 }
@@ -22,13 +26,14 @@
 #sf fieldset {
 	padding: 0;
 	border: none;
-	margin: 0;
+	margin: 0 0 10px 0;
 }
 
 
 /* #ss styles the survey summary */
 
 #ss table {
+	border-collapse: collapse;
 	border: 2px solid black;
 	margin-bottom: 30px;
 }
@@ -83,16 +88,4 @@ aligns to the left.
 #ss .type3 td:not(:first-child) ,
 #ss .type3 th:not(:first-child) {
    border-left: 2px solid;
-}
-
-#ss p {
-  margin: 0 0 20px 20px;
-}
-
-#ss div:nth-child(2) p {
-  margin: 20px 0 20px 0;
-}
-
-#ss div:nth-child(1) p:nth-child(2) {
-  margin: 20px 0 20px 0;
 }

@@ -1,9 +1,8 @@
 <?php
 
 /**
- * The Survey Generator makes it easy to conduct custom surveys.
+ * This file is a view file from the Survey Generator system.
  *
- * This file is part of the Survey Generator.
  * @author Robert Hallsey <rhallsey@yahoo.com>
  * @copyright Robert Hallsey, 2015
  * @license http://www.gnu.org/licenses/gpl.html GPLv3 license
@@ -11,7 +10,7 @@
 ?>
 <?php $colspan = count($data['answers']) + 1 ?>
 <?php if (isset($data['title'])): ?>
-<h3><?php echo $data['title'] ?></h3>
+<p><?php echo $data['title'] ?></p>
 
 <?php endif; ?>
 <table class="type1">

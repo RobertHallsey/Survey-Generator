@@ -6,8 +6,8 @@ survey_conduct
 		loadSurveyFile
 		prefillSurveyResponses
 	processSurvey
-		validateErrors
-		saveData
+		validateForm
+		saveForm
 	buildForm
 
 survey_summarize
@@ -21,7 +21,7 @@ survey_summarize
 include 'View.php';
 include 'Survey.php';
 
-function survey_conduct($given_survey = '') {
+function survey_conduct($given_survey) {
 	if (session_id() == '') session_start();
 	if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		$survey = new Survey($given_survey);
@@ -32,8 +32,7 @@ function survey_conduct($given_survey = '') {
 		if (!isset($_SESSION['survey_running'])) exit ('No running survey');
 		$survey = new Survey($_POST['survey_file']);
 		if ($survey->processSurvey(
-			$_POST['survey_save'],
-			$_POST['survey_data']) == TRUE) {
+			$_POST['survey_save'], $_POST['survey_data'])) {
 			unset($_SESSION['survey_running']);
 		}
 	}
@@ -42,7 +41,7 @@ function survey_conduct($given_survey = '') {
 
 function survey_summarize($given_survey = '') {
 	$survey = new Survey($given_survey);
-	echo $survey->prepareSummary();
+	$survey->prepareSummary();
 	echo $survey->theSummary();
 }
 	

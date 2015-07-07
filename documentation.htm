@@ -12,11 +12,11 @@
 
 <h3>What it is</h3>
 
-<p>Survey Generator gives you an easy way to generate, conduct, and summarize the results of custom surveys you can place anywhere on your website. It's not a smartphone app or something you can put on your Facebook page. Survey Generator is a web developer's tool, though it is very easy to use.</p>
+<p>Survey Generator gives you an easy way to generate, conduct, and summarize the responses to custom surveys you can place anywhere on your website. It's not a smartphone app or something you can put on your Facebook page. Survey Generator is a web developer's tool, though it is very easy to use.</p>
 
 <h3>How it works</h3>
 
-<p>Survey Generator works like this. Every survey consists of two files, a survey definition file, and a survey results file. Survey definition files are text files that contain the survey's questions and answer choices in Windows INI format. How to create these files is fully described later in this documentation. Survey results files are text files that collect the submitted responses in CSV (comma-separated values) format. Excel and other applications can load survey results files for ad hoc analysis, but Survey Generator includes a basic summarizing feature that may be all you need.</p>
+<p>After you include Survey Generator in your PHP project, you can invoke it anywhere you want with a single function. This function creates the survey form you specify, and processes the form when your visitor submits it. Surveys are described in simple text files, and responses to them are collected in CSV (comma-separated values) files. Although Excel and other applications can open survey response files, Survey Generator includes a basic summarizing function that may be all you need.</p>
 
 <h3>What's it for</h3>
 
@@ -38,7 +38,7 @@
 
 <h3>Obtaining Survey Generator</h3>
 
-<p>The most recent version of Survey Generator is always available from GitHub, at <a href="https://github.com/RobertHallsey/Survey-Generator">https://github.com/RobertHallsey/Survey-Generator</a>. If you're not familiar with GitHub, after you arrive at the linked page, look for the Download ZIP button at the bottom-right of the screen. That will get you a brand new zip of Survey Generator in your downloads folder.</p>
+<p>The most recent version of Survey Generator is always available from GitHub, at <a href="https://github.com/RobertHallsey/Survey-Generator">https://github.com/RobertHallsey/Survey-Generator</a>. If you're not familiar with GitHub, after you arrive at the linked page, look for the Download ZIP button at the bottom-right of the screen. Click to download a brand new zip of Survey Generator.</p>
 
 <h3>Files in the Package</h3>
 
@@ -53,7 +53,7 @@
   <li>View.php - A basic view class</li>
   <li>survey.css - Optional CSS code</li>
   <li>sample-survey - survey definition file</li>
-  <li>sample-survey.cvs - survey results files</li>
+  <li>sample-survey.cvs - survey responses files</li>
   <li>license.txt - text of the GPLv3
   <li>views (folder with 10 files)</li>
 </ul>
@@ -70,13 +70,13 @@
 
 <p>To conduct a survey, use <code>&lt;?php survey_conduct('survey definition file') ?></code> anywhere you want the survey form to appear. This one function builds and presents the survey form to the visitor, and then validates and saves the form after the user submits it.</p>
 
-<p>To summarize the results of a survey, use <code>&lt;?php survey_summarize('survey definition file') ?></code>. The <code>survey_summarize()</code> function generates tables summarizing the responses by count and percentage. Note that the function's argument is the name of the survey <i>definition</i> file, not the results file.</p>
+<p>To summarize the responses to a survey, use <code>&lt;?php survey_summarize('survey definition file') ?></code>. The <code>survey_summarize()</code> function generates tables summarizing the responses by count and percentage. Note that the function's argument is the name of the survey <i>definition</i> file, not the responses file.</p>
 
 <p>Finally, to get the name of a survey, the name embedded in the definition file, <code>&lt;?php survey_name('survey definition file')</code> will do it. This is a simple function that returns <code>false</code> if it can't find the file or if the file apparently isn't a survey definition file, or returns the survey name, which is embedded in a comment in the first line of the file.</p>
 
 <h3>Running the demo</h3>
 
-<p>This is optional but can be useful to help understand how Survey Generator works. Load the file <code>index.php</code> in your internet browser, and you should see the survey form for the survey described in the file <code>sample-survey</code>, and following that, you should see the summary created from the file <code>sample-survey.cvs</code>.</p>
+<p>This is optional but can be useful to help understand how Survey Generator works. Load the file <code>index.php</code> in your internet browser, and you should see the survey form for the survey described in the file <code>sample-survey</code>, and following that, you should see the summary created from the file <code>sample-survey.cvs</code>. Fill out and submit the form a few times and check that the summary figures change.</p>
 
 <h2>Survey definition files</h2>
 
@@ -98,11 +98,11 @@ answers[] = "L"</code></pre>
 
 <p>The first line says this is a type 1 question. Type 1 questions consist of a panel of questions, all with the same possible answers.</p>
 
-<p>The help property is a message displayed at the top of the questions, to the left of the answer headings. The help property is optional, and only type 1 questions recognize this property. You can't use it with types 2 and 3 questions.</p>
-
 <p>The title property is also optional, but can be used in all three question types. It's a heading that appears before the question. It's optional so that you can group several sections under the same title.</p>
 
-<p>Now comes a list of questions followed by a list of possible answers. Normally, property names must be unique, but the empty brackets mean that it's an array.</p>
+<p>The help property is a message displayed at the top of the questions, to the left of the answer headings. The help property is optional, and only type 1 questions recognize this property. You can't use it with types 2 and 3 questions.</p>
+
+<p>Then comes a list of questions followed by a list of possible answers. Normally, property names must be unique, but the empty brackets mean that it's an array.</p>
 
 <h3>Type 2 Question</h3>
 
@@ -138,13 +138,13 @@ answers[] = "I don't like my job"</pre>
 
 <p>In the case of Type 3 questions, the last possible answer <i>must always be a catchall answer!</i> Because this type of question allows multiple responses, the last answer is always assumed to be a form of "none of the above." And because it is not logical to select some of the above and then check the box for "none of the above," the survey won't let users select <i>some</i> of the answers <i>and</i> the final answer. Users may select some of the answers <i>or</i> the last answer but not both.</p>
 
-<h2>Survey results files</h2>
+<h2>Survey response files</h2>
 
 <p>Opening a survey result file in a text editor shows it to be a collection of lines similar to this. If you opened the file in Excel, everything would be in columns instead of separated by commas.</p>
 
 <code>"2015-06-22","21:28:05",1,3,2,1,3,1,0,1,0,1,0,1,0</code>
 
-<p>The first and second comma-separated items are obviously the time and date. This is the same timestamp displayed after a survey is submitted. Although the surveys are anonymous, survey confirmation pages can be used to verify the accuracy of a results file by matching their timestamps.</p>
+<p>The first and second comma-separated items are obviously the time and date. This is the same timestamp displayed after a survey is submitted. Although the surveys are anonymous, survey confirmation pages can be used to verify the accuracy of a response file by matching their timestamps.</p>
 
 <p>The row of numbers that follows the timestamp corresponds to the survey's responses. Since the sample line was taken from the file <code>sample-survey.csv</code>, we must refer to the definition file <code>sample-survey</code>. The first four numbers are 1, 3, 2, and 1. Those are the responses to the first question, the panel of four. Whoever submitted the survey prefers small Coke, large popcorn, medium candy, and wears a small T-Shirt. Moving on, we see they drive a 3, that is, a Ford, and they checked off a short commute, good co-workers, high status, and good pay as things they like about their job.</p>
 
@@ -161,10 +161,166 @@ answers[] = "I don't like my job"</pre>
 <p><code>SURVEY_ERROR_NO_RESPONSE</code>:<br>Message returned when form is submitted with unanswered questions, string in <code>sprintf</code> format, defaults to 'Please answer question #%d'.</p>
 <p><code>SURVEY_ERROR_EITHER_OR</code>:<br>Message returned when form is submitted with catchall and other answers selected, string in sprintf format, defaults to 'Last option is either/or in question #%d'.</p>
 
+<h2>Internationalization</h2>
+
+<p>Survey Generator runs all its text through a function called <code>__()</code> (double underscore). The <code>__()</code> function is commonly used in internationalization. The included function doesn't do anything, but you can modify it or somehow incorporate an internationalization library.
+
 <h2>F.A.Q.</h2>
 
 <p>None yet.</p>
- 
+
+<h2>Technical discussion</h2>
+
+<p>You don't have to read this to use Survey Generator, but it might help you understand the code and the design decisions it reflects. If you have any suggestions or ideas, please feel free to let me know at <a href="mailto:rhallsey@yahoo.com">rhallsey@yahoo.com</a>. I will be very grateful!</p>
+
+<h3>Why surveys aren't stored in a database</h3>
+
+<p>A survey has one or more questions, and each question accepts one or more response from a list of two or more possible answers. While the structure of a survey fits easily into the free-form nature of the associative array, it doesn't fit so easily into the rows, columns, and tables of a database. It can be done, but surveys are not queried like mailing lists or sales figures, so there's not much point in doing it. On the other hand, PHP offers a handy command that reads a file in INI format and returns the contents in associative array format. If a single command can do that, then saving the surveys in INI files is an easy design decision.</p>
+
+<h3>Function <code>survey_conduct($given_survey)</code> in <code>survey_main.php</code></h3>
+
+<p>This code displays the survey form and then receives and saves the survey data when the form is submitted. More precisely, it's an implementation of the survey class's methods in such a way that the survey form is displayed, etc. It's not the only possible implementation. You could implement it without any session code at all. Or you could split the display from the process part, the GET from the POST (though this would require a small change in one of the view files).</p>
+
+<p>Executing for the first time, sessions are started if not in progress already. It's the first time through, no form has been submitted yet, so the request method will be "GET." We create our instance of the survey object, prepare the form, record that the survey is running, and then show the survey form.</p>
+
+<p>When the form is submitted, we first check if there's a survey running, and exit if there isn't. Otherwise, we recreate our instance of the survey object and invoke its <code>processSurvey</code> method. This method rebuilds the survey's state from <code>$_POST['survey_save']</code> and <code>$_POST['survey_data']</code>. The method also validates the submitted data and saves the responses if they pass validation. If the method saves the data, it returns <code>true</code>. It returns <code>false</code> in all other cases. When the method successfully saves the survey data, it unsets the "running" flag. This prevents re-posting if users refresh pages after submitting surveys.</p>
+
+<h3>The survey array</h3>
+
+<p>When described in definition files, surveys consist of a series of sections, each section having specific properties as well as variable-size arrays for questions, possible answers, and actual responses. The array that holds the survey mirrors this structure, consisting of a series of sub-arrays, each sub-array having specific elements as well as sub sub-arrays for questions, possible answers, etc., etc. So if go by the included <code>sample-survey</code> file, the PHP code <code>foreach ($this->survey_data as $section_name => $section_data)</code> loops three times through the array.</p>
+
+<p>1st $section_name = 'section_1' and $section_data = array of name-value pairs in section_1<br>
+2nd $section_name = 'section_2' and $section_data = array of name-value pairs in section_2<br>
+3rd $section_name = 'section_3' and $section_data = array of name-value pairs in section_3</p>
+
+<p>Within each loop, you can access every element of the survey. For example, when $section_name = 'section_2' in the 2nd iteration, $section_data['title'] contains 'Lifestyle.' Also, $section_data['questions'] is an array that can be navigated as usual to discover that, for example, $section_data['answers'][2] contains 'Toyota.'</p>
+
+<h3>The survey form</h3>
+
+<p>Survey forms are generated from template files and the data in their survey arrays. Let's first look at the code generated for each question type. Type 1 questions are the most complex, since they contain multiple questions.</p>
+
+<p>Type 1 questions are placed in tables, and the table code includes colgroup and thead sections. Following this comes the tbody section, where the questions are laid out in rows. The code for a question looks like this.</p>
+
+<p><pre><code>&lt;tr>
+&lt;th scope="row">1. What size Coke do you prefer?&lt;input type="hidden" name="survey_data[section_1][responses][0]" value="0">&lt;/th>
+&lt;td>&lt;input type="radio" aria-label="What size Coke do you prefer?: S" name="survey_data[section_1][responses][0]" value="1">&lt;/td>
+&lt;td>&lt;input type="radio" aria-label="What size Coke do you prefer?: M" name="survey_data[section_1][responses][0]" value="2">&lt;/td>
+&lt;td>&lt;input type="radio" aria-label="What size Coke do you prefer?: L" name="survey_data[section_1][responses][0]" value="3">&lt;/td>
+&lt;/tr></code></pre>
+
+<p>This is all one row, the question, "What size Coke do you prefer?" The question is within a th element instead of td element. This is because the question, even though it appears to be a cell in the first column, is actually a table heading! It's just that it's a <i>row</i> table heading instead of the usual column table headings we see at top. So th is the correct element, and moreover, the scope="row" part helps reading assistance technology do its job. Notice there's a hidden field that returns the value zero. This creates a placeholder for the response even if the user doesn't choose one.</p>
+
+<p>The question's three possible answers are laid out in the second through fourth lines. The value returned is the ordinal value of the selected choice, 2 for 'M,' for example. The code uses the aria-label attribute to increase the code's accessibility.</p>
+
+</p>Question types 2 and 3 use fieldsets instead of tables. Here's the code for the question, "What kind of car do you drivr?" The elements fieldset, legend, and label are used to make the form as accessible as possible.</p>
+
+<p><pre><code>&lt;fieldset class="type2">
+  &lt;legend>5. What kind of car do you drive?&lt;/legend>
+  &lt;input type="hidden" name="survey_data[section_2][responses][0]" value="0">
+  &lt;input type="radio" id="Q50" name="survey_data[section_2][responses][0]" value="1">
+  &lt;label for="Q50">I don't drive&lt;/label>&lt;br>
+  &lt;input type="radio" id="Q51" name="survey_data[section_2][responses][0]" value="2">
+  &lt;label for="Q51">Honda&lt;/label>&lt;br>
+  &lt;input type="radio" id="Q52" name="survey_data[section_2][responses][0]" value="3">
+  &lt;label for="Q52">Toyota&lt;/label>&lt;br>
+  &lt;input type="radio" id="Q53" name="survey_data[section_2][responses][0]" value="4">
+  &lt;label for="Q53">Ford&lt;/label>&lt;br>
+  &lt;input type="radio" id="Q54" name="survey_data[section_2][responses][0]" value="5">
+  &lt;label for="Q54">General Motors&lt;/label>&lt;br>
+  &lt;input type="radio" id="Q55" name="survey_data[section_2][responses][0]" value="6">
+  &lt;label for="Q55">Other&lt;/label>
+&lt;/fieldset></code></pre></p>
+
+<p>In addition to variable combinations of sections, surveys contain uniform headers and footers. Here is the template code for the survey header (this is <i>template</i> code, not HTML output).</p>
+
+<p><pre><code>&lt;div id="sf">&lt;!-- sf survey form -->
+&lt;?php if ($error_question): ?>
+&lt;p>&lt;?php echo $error_msg ?>&lt;/p>
+
+&lt;?php endif; ?>
+&lt;form id="form" method="post">
+&lt;input type="hidden" name="survey_file" value="&lt;?php echo $survey_file ?>">
+&lt;input type="hidden" name="survey_save" value="&lt;?php echo $survey_save ?>"></code></pre></p>
+
+<p>After opening the form, the code defines two hidden fields. These fields contain the survey's definition file name and the data from the survey array (the survey's sections, questions, answers, etc.). When the visitor submits the form, these hidden values survive and show up as variables in the $_POST array. It's kind of Rube Goldberg, but it's a commonly used technique to persist values across page refreshes. Other ways use sessions or rely on cookies, but hidden fields is the simplest way.</p>
+
+<h3>The View class</h3>
+
+<p>How is the survey array itself saved? Let's look first at how the View class works. Whether you provide them when you create an instance of the View class or later, you must give your view object a template file to use and a list of variable stuffed inside an array. Your view object's render method then returns the HTML code that results from inserting the values in the variables you passed into the appropriate places in the template file. An example will make this much easier to understand. Suppose you have this in a template file called address.php.</p>
+
+<p><pre><code>&lt;div class = "address">
+  &lt;p>Mail to:&lt;/p>
+  &lt;p>&lt;?php echo $name ?>&lt;br>
+  &lt;?php echo $street ?>&lt;br>
+  &lt;?php echo $city ?>&lt;/p>
+&lt;/div>&lt;!-- address --></code></pre></p>
+
+<p>You would then fill an array with variables, like this</p>
+
+<p><pre><code>// $customer_last = 'Jones'
+// $customer_first = 'Thomas'
+// $customers_address = '123 Main St.'
+// $customer_city = 'Happy City'
+// $customer_state = 'XX'
+// $customer_zip = 'ZZZZZ'
+$variables = array(
+    'name' => $customer_last . ', ' . $customer_first,
+    'street' => $customer_address,
+    'city' => $customer_city . ', ' . $customer_state . ' ' . $customer_zip,
+);</code></pre></p>
+
+<p>See how the key names in $variables match the variable names in the template file? How you get the values into the array doesn't matter. What matters is matching the values to the names being passed in the array. Now let's look at bringing it together.</p>
+
+<p><pre><code>$myView = new View;
+$myView->assignFile('views/address');
+$myView->assignVar($variables);
+$x = $myView->render();</code></pre></p>
+
+<p>$x now contains this text,</p>
+<p><pre><code>&lt;div class = "address">
+&lt;p>Mail to:&lt;/p>
+&lt;p>Jones, Thomas&lt;br>
+123 Main St.&lt;br>
+Happy City, XX ZZZZZ&lt;/p></code></pre></p>
+
+<p>You could also shorten the whole thing to just <code>$x = new View('views/address', $variables);</code> and get the same result thanks to default methods.</p>
+
+<h3>Persisting the array data</h3>
+
+<p>Survey forms are not static content. They are generated on the fly by an algorith that reads survey definition files and produces HTML code using the values therein. Survey forms must further be presented at least twice, once for the initial presentation, and once again for the confirmation. Between those two times, submission errors could require presenting the form many more times. However, as is well known, each page refresh completely reinitializes the PHP environment, clearing all variables and arrays. The challenge then is how to persist the array data so that the dynamic form can be generated again after the page is refreshed.</p>
+
+<p>The easiest way is to abandon the challenge and simply reload and reparse the definition file each time, but this is expensive and inelegant. Another method would be to use sessions or cookies, but the method used here, hidden form fields, is the simplest. To see how it's done, let's trace the path of the survey array from when it first appears. That happens in the <code>loadSurveyFile()</code> method, in the code <code>$this->survey_data = parse_ini_file($this->survey_file, TRUE)</code></p>
+
+<p>From there, if the survey array passes validation, it goes to <code>theForm()</code> method, where the survey array itself is saved in the hidden field like this: <code>'survey_save' => base64_encode(serialize($this->survey_data))</code>. First, the survey array is serialized, but a serialized result contains binary zeroes, which cannot be expressed in strings, so the function base64_encode converts the serialized object into the ASCII/ANSI equivalent. This is a long and seemingly meaningless string that looks like this.</p>
+
+<p><pre><code>&lt;input type="hidden" name="survey_save" value="OpaTow6NDtpOYTozOntzOjk6InNlY3Rpb25fMSI7YTo2OntzOjQ6
+InR5cGUiO3M6MToiMSI7czo1OiJ0aXRsZSI7czoxMToiUHJlZmVyZW5jZXMiO3M6NDoiaGVscCI7czoyNDoiUz1zbWFsbCBNPW1
+lZGl1bSBMPWxhcmdlIjtzOjk6InF1ZXN0aW9ucyI7YTo0OntpOjA7czoyOToiV2hhdCBzaXplIENva2UgZG8geW91IHByZWZlcj
+8iO2k6MTt6MpOjY7aTowO"></code></pre></p>
+
+<p>Now the data to create the form is in the form itself. When the form is submitted, the survey data embedded in the hidden field goes to the <code>$_POST</code> array as <code>$_POST['survey_save']</code>. From there, it is passed to the <code>processSurvey()</code> method as <code>$survey_save</code>. The survey array is then restored with the code <code>$this->survey_data = unserialize(base64_decode($survey_save))</code>.</p>
+
+<h3>Javascript</h3>
+
+<p>The class uses two Javascript functions: <code>formReset</code>, to reset the form's controls, and <code>formDisable</code>, to disable them. Their execution is controlled by the protected property <code>$js_function</code>, the value of which is sent to the <code>surveyfooter.php</code> view file. When the survey object is first created, this property defaults to formReset. This ensures that, if the user presses the back button and returns to the pre-submission version of the form, the form is cleared. This prevents duplicate submissions.</p>
+
+<p>After the form is submitted, the <code>$js_function</code> property is set to '' to avoid calling any Javascript. This is because, between the form's first submission and its eventual recording as saved, we actually want to persist the data in order to repopulate the form. Once the submitted data passes validation, <code>$js_function</code> is set to <code>formDisable</code>. As its name indicates, the <code>formDisable</code> function disables all the controls on the form. This effectively makes the survey submission confirmation page read-only. The completed survey can be printed, but its values can no longer be changed.</p>
+
+<h3>Form validation</h3>
+
+<p>The main validation method, <code>validateForm()</code>, loops through the survey's sections and calls the validation method specific to each section's question type. This is done using PHP's variable function feature, in which the name of a function is stored in a variable, and the variable is then executed as if it were a function.</p>
+
+<p>Validating questions type 1 and type 2 only requires checking that they have responses. Any response is acceptable. Questions type 3, however, are a little different. In the case of type 3 questions, the last of the multiple-choice answers, must be either the only answer selected, or must not be selected at all. Users may not select other answers <i>and</i> the final answer because the final answer is a catch-all. This is discussed in the documentation on definition files.</p>
+
+<h3>The <code>saveForm()</code> method</h3>
+
+<p>The <code>saveForm()</code> method saves a survey form's responses to a text file, one line per submitted form. It starts by capturing the time and breaking it down to separate date and time representations. The method then adds each response value to the line, each value separated by a comma. The line is then ended with a Windows-style EOL (a carriage return followed by a new line).</p>
+
+<p>The <code>saveForm()</code> method takes the survey's definition file name and, after removing any existing file extension, adds the file extension stored in <code>SURVEY_RESPONSE_FILE_EXT</code> (a dot should not be included when defining this extension -- it should not be .csv but just csv). This is the file name where the responses will be stored. The method then appends the line it just constructed to this file, closes the file, and sets <code>formDisable</code> as the Javascript function to execute.</p>
+
+<h3>Survey summaries</h3>
+
+
 </body>
 
 </html>

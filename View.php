@@ -5,10 +5,9 @@
  * This class is based on the view class found
  * in Wolf CMS. Feel free to use under GPL v3
  *
- * This class produces HTML code for a page or section of page from
- * a "template" file that may use the "vars" you supply. A template file
- * is just a file with HTML and PHP code. It doesn't have to represent
- * an entire page. The file must have the extension .php.
+ * This class produces takes a template file that may included PHP code
+ * and produces HTML code from it, using as necessary the variables passed
+ * to it in an array.
  *
  */
 
@@ -17,6 +16,14 @@ class View {
 	protected $file; // Template file name. Don't specify extension. PHP will be assumed.
 	protected $vars = array(); // Array of template variables
 
+/**
+ * The class constructor only stores the template file name and the array of
+ * passed values. The two arguments are optional and can be passed later.
+ * Once an instance of View is created, it can be used over and over. To
+ * use an instance for a different view, simply pass it a different template.
+ * Template files must have a .php extension, but the extension must not be
+ * specified in the argument.
+ */
 	public function __construct($file = '', $vars = '') {
 		if ($file != '') {
 			$file .= '.php';
@@ -24,7 +31,7 @@ class View {
 				$this->file = $file;
 			}
 			else {		
-				throw new Exception("View file not found!");
+				throw new Exception('View file not found:' . $file);
 			}
 		}
 		if ($vars != '') {
@@ -32,13 +39,20 @@ class View {
 				$this->vars = $vars;
 			}
 			else {		
-				throw new Exception('Must pass variables in an array!');
+				throw new Exception('Variables not in an array:' . $file);
 			}
 		}
 	}
 
 /**
  * Returns the parsed content of a template.
+ *
+ * This is what allows us to do this:
+ * $content = new View($template, $variables)
+ *
+ * Instead of having to do this:
+ * $view = new View($template, $variables)
+ * $content = $view->render();
  *
  * @return string Parsed content of the view.
  */
