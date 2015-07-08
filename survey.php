@@ -38,7 +38,7 @@ class Survey {
 	const SURVEY_ERROR_NO_RESPONSE = 'Please answer question #%d';
 	const SURVEY_ERROR_EITHER_OR = 'Last option is either/or in question #%d';
 
-	protected $SURVEY_VIEW_FILES = SURVEY_BASE_PATH . 'views/';
+	protected $SURVEY_VIEW_FILES = SURVEY_BASE_PATH;
 	protected $survey_file = '';
 	protected $survey_data = array();
 	protected $js_function = 'formReset';
@@ -54,6 +54,7 @@ class Survey {
 			exit(__('Survey file not found'));
 		}
 		$this->survey_file = realpath($survey_arg);
+		$this->SURVEY_VIEW_FILES .= 'views/';		
 	}
 
 	public function prepareSurvey() {
