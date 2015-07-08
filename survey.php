@@ -29,13 +29,16 @@
  
 class Survey {
 
-	const SURVEY_VIEW_FILES = SURVEY_BASE_PATH . 'views/';
+	// Dammit! Can't do this until PHP 5.6...
+	// const SURVEY_VIEW_FILES = SURVEY_BASE_PATH . 'views/';
+
 	const SURVEY_RESET_BUTTON = 'Reset';
 	const SURVEY_SUBMIT_BUTTON = 'Submit';
 	const SURVEY_RESPONSE_FILE_EXT = 'csv';
 	const SURVEY_ERROR_NO_RESPONSE = 'Please answer question #%d';
 	const SURVEY_ERROR_EITHER_OR = 'Last option is either/or in question #%d';
 
+	protected $SURVEY_VIEW_FILES = SURVEY_BASE_PATH . 'views/';
 	protected $survey_file = '';
 	protected $survey_data = array();
 	protected $js_function = 'formReset';
@@ -184,7 +187,7 @@ class Survey {
 				? sprintf(Self::SURVEY_ERROR_NO_RESPONSE, $this->error)
 				: sprintf(Self::SURVEY_ERROR_EITHER_OR, -$this->error));
 		}
-		$view_file = Self::SURVEY_VIEW_FILES . 'surveyheader';
+		$view_file = $this->SURVEY_VIEW_FILES . 'surveyheader';
 		$variables = array(
 			'survey_file' => $this->survey_file,
 			'survey_save' => base64_encode(serialize($this->survey_data)),
@@ -195,7 +198,7 @@ class Survey {
 		// build body
 		$question_number = 1;
 		foreach ($this->survey_data as $section_name => $section_data) {
-			$view_file = Self::SURVEY_VIEW_FILES . 'qtype' . $this->survey_data[$section_name]['type'];
+			$view_file = $this->SURVEY_VIEW_FILES . 'qtype' . $this->survey_data[$section_name]['type'];
 			$variables = array(
 				'heading' => ((isset($this->survey_data[$section_name]['title']))
 					 ? $this->survey_data[$section_name]['title'] : ''),
@@ -208,7 +211,7 @@ class Survey {
 		}
 		// build footer
 		$js_code = (($this->js_function == '') ? '' : $this->js_function . '();');
-		$view_file = Self::SURVEY_VIEW_FILES . 'surveyfooter';
+		$view_file = $this->SURVEY_VIEW_FILES . 'surveyfooter';
 		$variables = array(
 			'reset_button' => Self::SURVEY_RESET_BUTTON,
 			'submit_button' => Self::SURVEY_SUBMIT_BUTTON,
@@ -326,14 +329,14 @@ class Survey {
 
 	function theSummary() {
 		$html = '';
-		$view_file = Self::SURVEY_VIEW_FILES . 'summaryheader';
+		$view_file = $this->SURVEY_VIEW_FILES . 'summaryheader';
 		$variables = array(
 			'response_count' => $this->response_count
 		);
 		$html .= new View($view_file, $variables);
 		$question_number = 1;
 		foreach ($this->survey_data as $section_name => $section_data) {
-			$view_file = Self::SURVEY_VIEW_FILES . 'stype' . $this->survey_data[$section_name]['type'];
+			$view_file = $this->SURVEY_VIEW_FILES . 'stype' . $this->survey_data[$section_name]['type'];
 			$variables = array(
 				'question_number' => $question_number,
 				'data' => $section_data,
@@ -343,7 +346,7 @@ class Survey {
 			$question_number += count($section_data['questions']);
 		}
 		$variables = array();
-		$view_file = Self::SURVEY_VIEW_FILES . 'summaryfooter';
+		$view_file = $this->SURVEY_VIEW_FILES . 'summaryfooter';
     	$html .= new View($view_file, $variables);
 		return $html;
 	}
