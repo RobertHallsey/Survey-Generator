@@ -171,7 +171,7 @@ class Survey {
 		else {
 			$file_name = $this->survey_file;
 		}
-		$file_name .= '.' . Self::SURVEY_RESPONSE_FILE_EXT;
+		$file_name .= '.' . $this->SURVEY_RESPONSE_FILE_EXT;
 		$file_handle = fopen($file_name, 'a');
 		fwrite($file_handle, $cur_line);
 		fclose($file_handle);
@@ -185,8 +185,8 @@ class Survey {
 		$error_msg = '';
 		if ($this->error) {
 			$error_msg = (($this->error > 0)
-				? sprintf(Self::SURVEY_ERROR_NO_RESPONSE, $this->error)
-				: sprintf(Self::SURVEY_ERROR_EITHER_OR, -$this->error));
+				? sprintf($this->SURVEY_ERROR_NO_RESPONSE, $this->error)
+				: sprintf($this->SURVEY_ERROR_EITHER_OR, -$this->error));
 		}
 		$view_file = $this->SURVEY_VIEW_FILES . 'surveyheader';
 		$variables = array(
@@ -214,8 +214,8 @@ class Survey {
 		$js_code = (($this->js_function == '') ? '' : $this->js_function . '();');
 		$view_file = $this->SURVEY_VIEW_FILES . 'surveyfooter';
 		$variables = array(
-			'reset_button' => Self::SURVEY_RESET_BUTTON,
-			'submit_button' => Self::SURVEY_SUBMIT_BUTTON,
+			'reset_button' => $this->SURVEY_RESET_BUTTON,
+			'submit_button' => $this->SURVEY_SUBMIT_BUTTON,
 			'js_code' => $js_code,
 			'disabled' => ($this->js_function == 'formDisable'),
 			'timestamp' => $this->timestamp,
@@ -241,7 +241,7 @@ class Survey {
 		else {
 			$response_file = $this->survey_file;
 		}
-		$response_file .= '.' . Self::SURVEY_RESPONSE_FILE_EXT;
+		$response_file .= '.' . $this->SURVEY_RESPONSE_FILE_EXT;
 		if (!file_exists($response_file)) {
 			return __('Survey response file not found');
 		}
