@@ -3,25 +3,25 @@
 [section_1]
 type = 1
 title = "Preferences"
-help = "Please select the size that you prefer"
+help = "S=small M=medium L=large"
 questions[] = "What size Coke do you prefer?"
 questions[] = "What size popcorn do you prefer?"
 questions[] = "What size candy bar do you prefer?"
 questions[] = "What size T-Shirt do you wear?"
-answers[] = "Small"
-answers[] = "Med."
-answers[] = "Large"
+answers[] = "S"
+answers[] = "M"
+answers[] = "L"
 
 [section_2]
 type = 2
 title = "Lifestyle"
 questions[] = "What kind of car do you drive?"
+answers[] = "I don't drive"
 answers[] = "Honda"
 answers[] = "Toyota"
 answers[] = "Ford"
 answers[] = "General Motors"
 answers[] = "Other"
-answers[] = "I don't drive"
 
 [section_3]
 type = 3
@@ -34,4 +34,3 @@ answers[] = "High status"
 answers[] = "Fun environment"
 answers[] = "Pays well"
 answers[] = "I don't like my job"
-

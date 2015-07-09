@@ -31,8 +31,7 @@ function survey_conduct($given_survey) {
 	else { // must be POST
 		if (!isset($_SESSION['survey_running'])) exit ('No running survey');
 		$survey = new Survey($_POST['survey_file']);
-		if ($survey->processSurvey(
-			$_POST['survey_save'], $_POST['survey_data'])) {
+		if ($survey->processSurvey($_POST['survey_save'], $_POST['survey_data'])) {
 			unset($_SESSION['survey_running']);
 		}
 	}
