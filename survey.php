@@ -214,8 +214,8 @@ class Survey {
 		$js_code = (($this->js_function == '') ? '' : $this->js_function . '();');
 		$view_file = $this->SURVEY_VIEW_FILES . 'surveyfooter';
 		$variables = array(
-			'reset_button' => $this->SURVEY_RESET_BUTTON,
-			'submit_button' => $this->SURVEY_SUBMIT_BUTTON,
+			'reset_button' => self::SURVEY_RESET_BUTTON,
+			'submit_button' => self::SURVEY_SUBMIT_BUTTON,
 			'js_code' => $js_code,
 			'disabled' => ($this->js_function == 'formDisable'),
 			'timestamp' => $this->timestamp,
