@@ -1,23 +1,5 @@
 <?php
 
-/*
-survey_conduct
-	prepareSurvey
-		loadSurveyFile
-		prefillSurveyResponses
-	processSurvey
-		validateForm
-		saveForm
-	buildForm
-
-survey_summarize
-	prepareSummary
-		loadSurveyFile
-		loadSurveyResponses
-		summarizeResponses
-	buildSummary
-*/
-
 include 'View.php';
 include 'Survey.php';
 
