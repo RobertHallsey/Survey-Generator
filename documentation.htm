@@ -163,11 +163,19 @@ answers[] = "I don't like my job"</pre>
 
 <h2>Internationalization</h2>
 
-<p>Survey Generator runs all its text through a function called <code>__()</code> (double underscore). The <code>__()</code> function is commonly used in internationalization. The included function doesn't do anything, but you can modify it or somehow incorporate an internationalization library.
+<p>Survey Generator runs all its text through a function called <code>__()</code> (double underscore). The <code>__()</code> function is commonly used in internationalization. The included function doesn't do anything (just returns whatever you send it), but you can modify it or somehow incorporate an internationalization library.
 
 <h2>F.A.Q.</h2>
 
-<p>None yet.</p>
+<p>1.- What's the story behind Survey Generator?</p>
+
+<p>I maintain a college professor's website, where he publishes course syllabuses and other materials useful to his students. The courses he teaches are in very broad subjects, so in order to tailor his courses to his classes, he decided to start surveying what his students know at the start of a course. For this, he asked me to look into the websites that offer surveys.</p>
+
+<p>I did, and we quickly ran into two problems. One problem was that the professor's needs exceeded what the limitations of the free versions, but the professor balked at paying a monthly fee for something he would use twice a year. The second problem was worse -- creating surveys was laborious! Creating the surveys involved lots of clicking and selecting for each question, not to mention waiting for endless trips back and forth to the server. Two more shortcomings quickly became apparent. The surveys had to be taken at the website that offered them, so the professor's students would no longer be on their professor's website. The final deal-breaker was that on the two services we tried, you could submit a completed survey and then refresh the page a hundred times and submit a hundred duplicate responses, thus ruining the survey. They had no protection against duplicate submission.</p>
+
+<p>Working with the professor in his office, I stared at the list with the survey questions which he had printed out for me. Even if I found a survey site that met his requirements, I was going to have to type each question even though he had already typed them. Inneficiency bothers me, especially when it makes <i>me</i> work harder, and I wondered, why couldn't I just upload the list of questions? In a flash -- and yes, that's how it happens -- I realized I could, if I just stopped thinking in terms of database tables and rows!</p>
+
+<p>I thought to myself, you know, there's no reason why I couldn't write some code that took that list, looped through each question, put them all on a form, and then recorded whatever they collected. It seemed a pretty basic PHP exercise, and so I created Survey Generator.</p>
 
 <h2>Technical discussion</h2>
 

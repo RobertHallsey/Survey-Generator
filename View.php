@@ -13,9 +13,6 @@
 
 class View {
 
-	protected $file; // Template file name. Don't specify extension. PHP will be assumed.
-	protected $vars = array(); // Array of template variables
-
 /**
  * The class constructor only stores the template file name and the array of
  * passed values. The two arguments are optional and can be passed later.
@@ -24,6 +21,10 @@ class View {
  * Template files must have a .php extension, but the extension must not be
  * specified in the argument.
  */
+
+	protected $file; // Template file name. Don't specify extension. PHP will be assumed.
+	protected $vars = array(); // Array of template variables
+
 	public function __construct($file = '', $vars = '') {
 		if ($file != '') {
 			$file .= '.php';
